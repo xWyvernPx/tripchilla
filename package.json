@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "tedious": "^14.4.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.1"
+  }
+}
