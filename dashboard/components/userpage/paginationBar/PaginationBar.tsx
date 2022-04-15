@@ -14,7 +14,7 @@ const PaginationBar: React.FC<Props> = ({page,limit,total,onNextHandle,onPrevHan
   return (
     <Pagination>
         <span>Items per page {limit}</span>
-        <NavButton disabled={page===1 ?true : false} onClick={onPrevHandle}>◀</NavButton>
+        <NavButton disabled={page===1 ||page===0 ?true : false} onClick={onPrevHandle}>◀</NavButton>
         <NavButton disabled = {(page)*limit >= total ?true : false} onClick={onNextHandle}>▶</NavButton>
     </Pagination>
   )

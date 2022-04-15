@@ -115,6 +115,11 @@ export const GlobalStyle = createGlobalStyle`
       font-family:  'Lato','Poppins','Josefin Sans', sans-serif;
 
    }
+   input {
+     &:focus{
+       outline: none;
+     }
+   }
    ol, ul {
        list-style: none;
    }

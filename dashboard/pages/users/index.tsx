@@ -8,15 +8,17 @@ import UserrowMenu, {
 } from "components/userpage/functionUserRow/UserrowMenu";
 import PaginationBar from "components/userpage/paginationBar/PaginationBar";
 import Modal from "components/common/modal/Modal";
+import UpdateForm from "components/userpage/UserUpdateForm/UpdateForm";
+import CreateForm from "components/userpage/CreateUserForm/CreateForm";
 
-const sample = ["1","Thanh Phong","16-5-2002","wyvernp","nhochociu1@gmail.com","Beginner"]
+const sample = ["1","Thanh Phong","16-5-2002","0902888999","wyvernp","nhochociu1@gmail.com","Beginner"]
 function UserPage() {
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
     total: 0,
   });
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState({state : false ,FormComp : UpdateForm});
   const buttons = useMemo(():Array<ButtonProps>=>[
       {
         content: "Active/Unactive",
@@ -26,17 +28,17 @@ function UserPage() {
       },
       {
           content: "Update Information",
-          onClickHandle : ()=> {setModalShow(true);}
+          onClickHandle : ()=> {setModalShow({...modalShow,state: true,FormComp : UpdateForm});}
       },
   ],[]);
-  const closeModal = useCallback(()=> setModalShow(false),[]);
-
+  const closeModal = useCallback(()=> setModalShow({...modalShow,state:false}),[]);
+  const handleAddNewUser = useCallback(()=> setModalShow({...modalShow,state:true,FormComp : CreateForm}),[CreateForm])
   useEffect(() => {}, [pagination]);
   return (
     <PageLayout>
       <PageHeader content={<h1>Users</h1>} />
       <FuntionArea>
-        <AddNewButton>Add new user</AddNewButton>
+        <AddNewButton onClick={handleAddNewUser} >Add new user</AddNewButton>
       </FuntionArea>
       <UserList>
         <Searchbar>
@@ -75,7 +77,7 @@ function UserPage() {
           }, [])}
         />
       </UserList>
-      {modalShow && <Modal onCloseModal = {closeModal} />}
+      {modalShow.state && <Modal formComponent={ <modalShow.FormComp/>} onCloseModal = {closeModal} />}
     </PageLayout>
   );
 }
