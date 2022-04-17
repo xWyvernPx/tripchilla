@@ -1,6 +1,12 @@
 import PageHeader from "components/common/pageheader/PageHeader";
 import StatusTag from "components/userpage/statusTag/StatusTag";
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import styled from "styled-components";
 import { IconSearch } from "@tabler/icons";
 import UserrowMenu, {
@@ -11,34 +17,56 @@ import Modal from "components/common/modal/Modal";
 import UpdateForm from "components/userpage/UserUpdateForm/UpdateForm";
 import CreateForm from "components/userpage/CreateUserForm/CreateForm";
 
-const sample = ["1","Thanh Phong","16-5-2002","0902888999","wyvernp","nhochociu1@gmail.com","Beginner"]
+const sample = [
+  "1",
+  "Thanh Phong",
+  "16-5-2002",
+  "0902888999",
+  "wyvernp",
+  "nhochociu1@gmail.com",
+  "Beginner",
+];
 function UserPage() {
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
     total: 0,
   });
-  const [modalShow, setModalShow] = useState({state : false ,FormComp : UpdateForm});
-  const buttons = useMemo(():Array<ButtonProps>=>[
+  const [modalShow, setModalShow] = useState({
+    state: false,
+    FormComp: UpdateForm,
+  });
+  const buttons = useMemo(
+    (): Array<ButtonProps> => [
       {
         content: "Active/Unactive",
-        onClickHandle : ()=> { 
-            // TODO : handleActiveUnactive here
-         }
+        onClickHandle: () => {
+          // TODO : handleActiveUnactive here
+        },
       },
       {
-          content: "Update Information",
-          onClickHandle : ()=> {setModalShow({...modalShow,state: true,FormComp : UpdateForm});}
+        content: "Update Information",
+        onClickHandle: () => {
+          setModalShow({ ...modalShow, state: true, FormComp: UpdateForm });
+        },
       },
-  ],[]);
-  const closeModal = useCallback(()=> setModalShow({...modalShow,state:false}),[]);
-  const handleAddNewUser = useCallback(()=> setModalShow({...modalShow,state:true,FormComp : CreateForm}),[CreateForm])
+    ],
+    []
+  );
+  const closeModal = useCallback(
+    () => setModalShow({ ...modalShow, state: false }),
+    []
+  );
+  const handleAddNewUser = useCallback(
+    () => setModalShow({ ...modalShow, state: true, FormComp: CreateForm }),
+    [CreateForm]
+  );
   useEffect(() => {}, [pagination]);
   return (
     <PageLayout>
       <PageHeader content={<h1>Users</h1>} />
       <FuntionArea>
-        <AddNewButton onClick={handleAddNewUser} >Add new user</AddNewButton>
+        <AddNewButton onClick={handleAddNewUser}>Add new user</AddNewButton>
       </FuntionArea>
       <UserList>
         <Searchbar>
@@ -62,7 +90,7 @@ function UserPage() {
             </UserRow>
           </thead>
           <tbody>
-            <Row data={sample} buttons= {buttons} ></Row>
+            <Row data={sample} buttons={buttons}></Row>
           </tbody>
         </UserTable>
         <PaginationBar
@@ -77,21 +105,26 @@ function UserPage() {
           }, [])}
         />
       </UserList>
-      {modalShow.state && <Modal formComponent={ <modalShow.FormComp/>} onCloseModal = {closeModal} />}
+      {modalShow.state && (
+        <Modal
+          formComponent={<modalShow.FormComp />}
+          onCloseModal={closeModal}
+        />
+      )}
     </PageLayout>
   );
 }
 // ROW WITH DATA AND CUSTOM BUTTON
-interface ButtonProps {
+export interface ButtonProps {
   content: string;
-  onClickHandle: React.MouseEventHandler;
+  onClickHandle: Function;
 }
 interface RowProps {
   data: Array<string>;
   buttons: Array<ButtonProps>;
 }
 
-const Row: React.FC<RowProps> = ({ data, buttons }) => {
+export const Row: React.FC<RowProps> = ({ data, buttons }) => {
   return (
     <UserRow>
       {data.map((ele: any, i: any) => (
@@ -103,7 +136,7 @@ const Row: React.FC<RowProps> = ({ data, buttons }) => {
       <td>
         <UserrowMenu>
           {buttons.map((ele: ButtonProps, i: number) => (
-            <MenuButton onClick={ele.onClickHandle} key={i}>
+            <MenuButton onClick={() => ele.onClickHandle(data)} key={i}>
               {ele.content}
             </MenuButton>
           ))}
@@ -113,7 +146,7 @@ const Row: React.FC<RowProps> = ({ data, buttons }) => {
   );
 };
 //STYLED-COMPONENT
-const PageLayout = styled.div`
+export const PageLayout = styled.div`
   /* dimension */
   width: 100%;
   height: 100%;
@@ -122,7 +155,7 @@ const PageLayout = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const FuntionArea = styled.div`
+export const FuntionArea = styled.div`
   //dimensions
   width: 100%;
   height: fit-content;
@@ -132,7 +165,7 @@ const FuntionArea = styled.div`
   align-items: center;
   justify-content: flex-end;
 `;
-const AddNewButton = styled.button`
+export const AddNewButton = styled.button`
   //dimensions
   width: fit-content;
   height: fit-content;
@@ -146,7 +179,7 @@ const AddNewButton = styled.button`
   font-size: var(--fs-medium);
   font-weight: 600;
 `;
-const UserList = styled.div`
+export const UserList = styled.div`
   //dimension
   flex-grow: 1;
   padding: 1rem;
@@ -158,7 +191,7 @@ const UserList = styled.div`
   border: 2px solid var(--dark-gray);
   border-radius: var(--radius);
 `;
-const Searchbar = styled.div`
+export const Searchbar = styled.div`
   /* dimension */
   width: fit-content;
   height: fit-content;
@@ -176,7 +209,7 @@ const Searchbar = styled.div`
     }
   }
 `;
-const UserTable = styled.table`
+export const UserTable = styled.table`
   //dimension
   width: 100%;
   margin-top: 1rem;
@@ -187,7 +220,7 @@ const UserTable = styled.table`
     border-bottom: unset;
   }
 `;
-const UserRow = styled.tr`
+export const UserRow = styled.tr`
   border-bottom: 1px var(--dark-gray) solid;
   th {
     //display

@@ -6,13 +6,12 @@ import "swiper/css";
 
 import DestinationCard from "./DestinationCard";
 const SwiperWrapper = styled(Swiper)`
-
   width: 100%;
   height: auto;
   .swiper-slide {
     width: fit-content;
     max-width: unset;
-    background-color: red;
+    /* background-color: red; */
     border-radius: var(--radius);
   }
   .swiper-button-prev,
@@ -28,6 +27,7 @@ const SwiperWrapper = styled(Swiper)`
     align-items: center;
     justify-content: center;
     color: var(--primary-color);
+    text-shadow: 0px 0px 2px white;
     &.swiper-button-disabled {
       opacity: 0.35;
       cursor: auto;
@@ -89,7 +89,7 @@ function Recommend() {
         },
         1280: {
           slidesPerView: 4,
-        }
+        },
       }}
     >
       <SwiperSlide>

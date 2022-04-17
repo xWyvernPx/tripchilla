@@ -1,19 +1,59 @@
 import type { NextPage } from "next";
+import { useCallback, useState } from "react";
 import styled from "styled-components";
 import AccountPanel from "../components/common/AccountPanel/AccountPanel";
 import Ads2 from "../components/common/Ads/Ads2";
-import ScheduleCard from "../components/common/ScheduleCard/ScheduleCard";
+import Modal from "../components/common/Modal/Modal";
 import BestChoice from "../components/Dashboard/BestChoice";
 import DashboardHeader from "../components/Dashboard/DashboardHeader";
 import MySchedule from "../components/Dashboard/MySchedule";
 import Recommend from "../components/Dashboard/Recommend";
 import Upcoming from "../components/Dashboard/Upcoming";
+
+const Home: NextPage = () => {
+  const [showModal, setShowModal] = useState({
+    show: true,
+    component: null,
+  });
+  const handleCloseModal = useCallback(() => {
+    setShowModal({
+      show: false,
+      component: null,
+    });
+  }, []);
+  const handleDetailModal = useCallback(() => {
+    setShowModal({
+      show: false,
+      component: null,
+    });
+  }, []);
+
+  return (
+    <DashboardLayout>
+      <MainLayout>
+        <DashboardHeader />
+        <Recommend />
+        <ContentBottom>
+          <BestChoice />
+          <Ads2 />
+        </ContentBottom>
+      </MainLayout>
+      <RightSidebar>
+        <AccountPanel />
+        <MySchedule />
+        <Upcoming />
+      </RightSidebar>
+      {showModal.show && (
+        <Modal onCloseModal={handleCloseModal} formComponent={<h1>Check</h1>} />
+      )}
+    </DashboardLayout>
+  );
+};
 const DashboardLayout = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
   min-height: 0;
-
 `;
 const MainLayout = styled.div`
   display: flex;
@@ -40,24 +80,4 @@ const ContentBottom = styled.div`
   display: flex;
   gap: 1.5rem;
 `;
-const Home: NextPage = () => {
-  return (
-    <DashboardLayout>
-      <MainLayout>
-        <DashboardHeader />
-        <Recommend />
-        <ContentBottom>
-          <BestChoice />
-          <Ads2 />
-        </ContentBottom>
-      </MainLayout>
-      <RightSidebar>
-        <AccountPanel/>
-        <MySchedule />
-        <Upcoming />
-      </RightSidebar>
-    </DashboardLayout>
-  );
-};
-
 export default Home;

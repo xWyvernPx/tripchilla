@@ -1,7 +1,7 @@
  export interface PaginationQuery {
         page: number;
         limit: number;
-        order: string;
+        order?: string;
  }
  export interface PaginationResponse<T> {
         data: T[];

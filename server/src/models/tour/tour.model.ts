@@ -1,5 +1,6 @@
 import sequelize from "../../database"
 import { DataTypes, Model, Optional } from "sequelize"
+import joi,{Schema} from "joi"
 export interface ITour {
     id ?: number ,
     tourId:string,
@@ -9,7 +10,8 @@ export interface ITour {
     created_by : string,
     start : Date,
     end : Date ,
-    rating : number
+    rating : number,
+    limit_participants : number,
      
 }
 interface TourCreationAttributes extends Optional<ITour, "id"> { }
@@ -54,6 +56,9 @@ const Tour = sequelize.define<TourInstance>("Tour", {
     rating : {
         type: DataTypes.FLOAT,
         defaultValue: 0
+    },
+    limit_participants : {
+        type: DataTypes.INTEGER,
     }
 },{
     modelName: "Tour",
@@ -62,3 +67,30 @@ const Tour = sequelize.define<TourInstance>("Tour", {
 })
 
 export default Tour;
+
+export const TourSchemas  =  {
+    tourBodySchema : joi.object().keys({
+        name : joi.string().required().max(150),
+        location : joi.number().required(),
+        price_per_day : joi.number().required(),
+        created_by : joi.string().required(),
+        limit_participants :  joi.number().required().min(0),
+        start:  joi.date().required(),
+        end : joi.date().required(),
+        rating : joi.number().min(0).max(5)
+    }),
+    tourIdSchema: joi.object().keys({
+        tourId : joi.string().required().max(150),
+    }),
+    tourOptionalBodySchema : joi.object().keys({
+        name : joi.string().max(150),
+        location : joi.number(),
+        price_per_day : joi.number(),
+        created_by : joi.string(),
+        limit_participants :  joi.number().min(0),
+        start:  joi.date(),
+        end : joi.date(),
+        rating : joi.number().min(0).max(5)
+    }),
+
+}

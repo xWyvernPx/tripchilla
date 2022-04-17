@@ -28,7 +28,7 @@ export const GlobalStyle = createGlobalStyle`
     --line-height-medium: 1.75;
     --line-height-large: 2;
     --line-height-xlarge: 2.5;
-    --side-bar-size : 15rem;
+    --side-bar-size : 15vw;
     
 }
 /* html {
@@ -203,18 +203,16 @@ const AppLayout = styled.div`
   padding: var(--layout-padding);
   width: 100%;
   height: calc(100vh - 2 * var(--layout-padding));
-   display:  grid;
-    grid-template-columns: var(--side-bar-size) 1fr;
-  
-   @media screen and (max-width: 1279.98px) {
+  display: grid;
+  grid-template-columns: var(--side-bar-size) 1fr;
+
+  @media screen and (max-width: 1279.98px) {
     height: calc(95vh - 2 * var(--layout-padding));
-   }
+  }
   @media screen and (max-width: 767.98px) {
     grid-template-columns: 1fr;
     position: relative;
   }
-  
-    
 `;
 const SidebarWrapper = styled.div`
   //   background-color: var(--secondary-color);
@@ -235,8 +233,6 @@ const SidebarWrapper = styled.div`
     z-index: 10;
     justify-content: center;
   }
-
-  
 `;
 const LogoWrapper = styled.div`
   height: 5rem;
@@ -247,26 +243,27 @@ const LogoWrapper = styled.div`
     transform: scale(1.5);
   }
   @media screen and (max-width: 1279.98px) {
-    span {transform : scale(1.2);}
+    span {
+      transform: scale(1.2);
+    }
   }
   @media screen and (max-width: 1023.98px) {
-    span {transform : scale(1);}
+    span {
+      transform: scale(1);
+    }
   }
-@media screen and (max-width: 767.98px) {
-display: none;
-}
-
-  
+  @media screen and (max-width: 767.98px) {
+    display: none;
+  }
 `;
 const PageLayout = styled.div`
   /* flex: 1; */
   width: 100%;
   height: calc(100vh - 2 * var(--layout-padding));
-  min-width:0;
+  min-width: 0;
   @media screen and (max-width: 767.98px) {
     grid-area: main;
   }
-  
 `;
 function Layout(props: ComponentProps<any>) {
   const children: ReactChildren = props.children;

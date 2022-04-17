@@ -12,7 +12,6 @@ import {
 import styled from "styled-components";
 
 const SidebarLayout = styled.ul`
- 
   width: 85%;
   display: flex;
   flex-direction: column;
@@ -55,7 +54,7 @@ const SidebarLayout = styled.ul`
       }
       box-shadow: 0 0.5rem 1rem rgba(28, 194, 139, 0.4);
     }
-    &.nav-active{
+    &.nav-active {
       background-color: var(--primary-color);
       color: var(--white);
       svg {
@@ -74,53 +73,50 @@ const SidebarLayout = styled.ul`
     height: 100%;
     flex-direction: row;
     position: relative;
-    #des{
+    #des {
       --start-change: calc(100vw - 440px);
-  --delta-px : 0.192px;
-  --init-x:calc(var(--start-change)*var(--delta-px));
+      --delta-px: 0.192px;
+      --init-x: calc(var(--start-change) * var(--delta-px));
       position: absolute;
       height: 100%;
       background-color: var(--primary-color);
       aspect-ratio: 1;
       border-radius: 50%;
       z-index: -10;
-      transform: translateX(var(--init-x)); 
+      transform: translateX(var(--init-x));
     }
-    li{
+    li {
       height: 100%;
       flex-direction: column;
       justify-content: center;
       padding: unset;
       padding-left: unset;
-      span{
+      span {
         visibility: collapse;
         position: relative;
-        bottom: -100px
+        bottom: -100px;
       }
       svg {
-        
       }
       &:hover {
         background-color: unset;
         box-shadow: unset;
         svg {
           transform: translateY(-15px);
-
         }
         span {
           visibility: visible;
-          bottom:0;
+          bottom: 0;
+        }
       }
     }
-
   }
-}
 `;
 function Sidebar() {
   return (
     <>
       <SidebarLayout>
-        <div id="des" ></div>
+        <div id="des"></div>
         <li className="sidebar__item">
           <IconSmartHome />
           <span>
@@ -130,13 +126,13 @@ function Sidebar() {
         <li className="sidebar__item">
           <IconTicket />
           <span>
-            <Link href={`/tickets`}>My Trips</Link>
+            <Link href={`/trips`}>My Trips</Link>
           </span>
         </li>
         <li className="sidebar__item">
           <IconBookmark />
           <span>
-            <Link href={`/favorite`}>Favorites</Link>
+            <Link href={`/explore`}>Explore</Link>
           </span>
         </li>
         <li className="sidebar__item">
