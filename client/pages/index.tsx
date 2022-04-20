@@ -10,31 +10,34 @@ import {
   Upcoming,
 } from "../components/Dashboard/index";
 import useTrips from "hooks/useTrips";
+import DetailTrip from "components/MyTrip/Detail Trip/DetailTrip";
 
 const Home: NextPage = () => {
   const [showModal, setShowModal] = useState({
     show: true,
-    component: null,
+    component: DetailTrip,
+    payload: null,
   });
   const { trips, getTourById } = useTrips();
   const handleCloseModal = useCallback(() => {
     setShowModal({
+      ...showModal,
       show: false,
-      component: null,
-    });
-  }, []);
-  const handleDetailModal = useCallback(() => {
-    setShowModal({
-      show: false,
-      component: null,
     });
   }, []);
 
+  const handleCardClick = useCallback((payload: any) => {
+    setShowModal({
+      show: true,
+      component: DetailTrip,
+      payload,
+    });
+  }, []);
   return (
     <DashboardLayout>
       <MainLayout>
         <DashboardHeader />
-        <Recommend />
+        <Recommend listDestination={trips} handleCardClick={handleCardClick} />
         <ContentBottom>
           <BestChoice />
           <Ads2 />
@@ -46,7 +49,14 @@ const Home: NextPage = () => {
         <Upcoming />
       </RightSidebar>
       {showModal.show && (
-        <Modal onCloseModal={handleCloseModal} formComponent={<h1>Check</h1>} />
+        <Modal
+          onCloseModal={handleCloseModal}
+          formComponent={
+            <showModal.component
+              payload={showModal.payload}
+            ></showModal.component>
+          }
+        />
       )}
     </DashboardLayout>
   );
@@ -56,15 +66,16 @@ const DashboardLayout = styled.div`
   width: 100%;
   height: 100%;
   min-height: 0;
+  overflow-y: auto;
 `;
 const MainLayout = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: fit-content;
   min-width: 0;
   row-gap: 2rem;
   /* max-width: 100%; */
-  height: 100%;
+  height: fit-content;
   padding: var(--layout-padding);
   background-color: var(--secondary-background);
   border-radius: var(--radius);

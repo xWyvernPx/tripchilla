@@ -1,11 +1,17 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { A11y, Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { DestinationCard } from "components/common";
 
-function Recommend() {
+interface Props {
+  listDestination: any;
+  handleCardClick: MouseEventHandler;
+}
+
+const Recommend: React.FC<Props> = (props) => {
+  const { listDestination, handleCardClick } = props;
   return (
     // <RecommendWrapper>
     <SwiperWrapper
@@ -36,7 +42,14 @@ function Recommend() {
         },
       }}
     >
-      <SwiperSlide>
+      {listDestination &&
+        listDestination.map((item: any, i: number) => (
+          <SwiperSlide key={i}>
+            <DestinationCard data={item} onSelected={handleCardClick} />
+          </SwiperSlide>
+        ))}
+
+      {/* <SwiperSlide>
         <DestinationCard />
       </SwiperSlide>
       <SwiperSlide>
@@ -47,17 +60,14 @@ function Recommend() {
       </SwiperSlide>
       <SwiperSlide>
         <DestinationCard />
-      </SwiperSlide>
-      <SwiperSlide>
-        <DestinationCard />
-      </SwiperSlide>
+      </SwiperSlide> */}
     </SwiperWrapper>
-    // </RecommendWrapper>
   );
-}
+};
 const SwiperWrapper = styled(Swiper)`
   width: 100%;
-  height: auto;
+  height: fit-content;
+  flex-shrink: 0;
   .swiper-slide {
     width: fit-content;
     max-width: unset;

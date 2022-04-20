@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { IconMapPin, IconStar } from "@tabler/icons";
 import Image from "next/image";
@@ -7,15 +7,20 @@ interface backgroundUrl {
   backgroundUrl?: string;
 }
 
-//TODO : fetch info of location
-function DestinationCard() {
+interface DestCardProps {
+  data: any;
+  onSelected: MouseEventHandler;
+}
+
+const DestinationCard: React.FC<DestCardProps> = (props) => {
+  const { data, onSelected } = props;
   return (
-    <CardWrapper>
+    <CardWrapper onClick={() => onSelected(data)}>
       <CardBackground
         id="destcardbg"
         backgroundUrl="https://img.freepik.com/free-vector/outdoor-nature-adventure-camping-illustration-cartoon-flat-tourist-camp-with-picnic-spot-tent-among-forest-mountain-landscape_1150-37344.jpg?t=st=1649253110~exp=1649253710~hmac=8a9a79b71b0659ebdf97e4a712bd7f30a6899129749e780efe4205deb50227d8&w=2000"
       ></CardBackground>
-      <h3>Mount Forel</h3>
+      <h3>{data && data.name}</h3>
       <div>
         <Properties>
           <IconMapPin />
@@ -23,12 +28,12 @@ function DestinationCard() {
         </Properties>
         <Properties>
           <IconStar />
-          <h4>4.8</h4>
+          <h4>{data && data.rating}</h4>
         </Properties>
       </div>
     </CardWrapper>
   );
-}
+};
 const CardWrapper = styled.div`
   display: flex;
   position: relative;

@@ -29,7 +29,9 @@ export const GlobalStyle = createGlobalStyle`
     --line-height-large: 2;
     --line-height-xlarge: 2.5;
     --side-bar-size : 15vw;
-    
+    --dangerous : #a32e2c;
+    --active : #4f8a30;
+    --warning : #eec762;
 }
 /* html {
     scroll-behavior: smooth;
