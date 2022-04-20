@@ -1,13 +1,7 @@
-import  {createServer} from 'https'
-import axiosClient from './src/utils/axiosClient';
-import fs from "fs"
-import app from './src/app'
+import fs from "fs";
+import { createServer } from 'https';
+import app from './src/app';
 import sequelize from './src/database';
-import { IncomingMessage } from 'http';
-import Province from './src/models/location/province';
-import axios from 'axios';
-import Ward from './src/models/location/ward.model';
-import District from './src/models/location/district.model';
 import { districtsLoad, provincesLoad, wardsLoad } from './src/models/location/location';
 const port = process.env.PORT || 4000;
 

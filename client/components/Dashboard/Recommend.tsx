@@ -1,10 +1,60 @@
 import React from "react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
 import styled from "styled-components";
+import { A11y, Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { DestinationCard } from "components/common";
 
-import DestinationCard from "./DestinationCard";
+function Recommend() {
+  return (
+    // <RecommendWrapper>
+    <SwiperWrapper
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      spaceBetween={0}
+      slidesPerView={4}
+      navigation={true}
+      pagination={{ clickable: true }}
+      scrollbar={{ draggable: true }}
+      onSwiper={(swiper) => console.log(swiper)}
+      onSlideChange={() => console.log("slide change")}
+      className="mySwiper"
+      breakpoints={{
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 40,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 50,
+        },
+        1280: {
+          slidesPerView: 4,
+        },
+      }}
+    >
+      <SwiperSlide>
+        <DestinationCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <DestinationCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <DestinationCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <DestinationCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <DestinationCard />
+      </SwiperSlide>
+    </SwiperWrapper>
+    // </RecommendWrapper>
+  );
+}
 const SwiperWrapper = styled(Swiper)`
   width: 100%;
   height: auto;
@@ -60,56 +110,5 @@ const SwiperWrapper = styled(Swiper)`
     left: auto;
   }
 `;
-
-function Recommend() {
-  return (
-    // <RecommendWrapper>
-    <SwiperWrapper
-      modules={[Navigation, Pagination, Scrollbar, A11y]}
-      spaceBetween={0}
-      slidesPerView={4}
-      navigation={true}
-      pagination={{ clickable: true }}
-      scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
-      className="mySwiper"
-      breakpoints={{
-        640: {
-          slidesPerView: 1,
-          spaceBetween: 20,
-        },
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 40,
-        },
-        1024: {
-          slidesPerView: 3,
-          spaceBetween: 50,
-        },
-        1280: {
-          slidesPerView: 4,
-        },
-      }}
-    >
-      <SwiperSlide>
-        <DestinationCard />
-      </SwiperSlide>
-      <SwiperSlide>
-        <DestinationCard />
-      </SwiperSlide>
-      <SwiperSlide>
-        <DestinationCard />
-      </SwiperSlide>
-      <SwiperSlide>
-        <DestinationCard />
-      </SwiperSlide>
-      <SwiperSlide>
-        <DestinationCard />
-      </SwiperSlide>
-    </SwiperWrapper>
-    // </RecommendWrapper>
-  );
-}
 
 export default Recommend;

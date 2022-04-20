@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="dct948bhb0e9us@ec2-52-203-118-49.compute-1.amazonaws.com" uuid="d440601c-1961-45cc-838e-3157644d0f0f">
+    <data-source source="LOCAL" name="dct948bhb0e9us@ec2-52-203-118-49.compute-1.amazonaws.com" uuid="305ad706-0f1d-4f69-aea4-139726945e1e">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://ec2-52-203-118-49.compute-1.amazonaws.com:5432/dct948bhb0e9us</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="@localhost" uuid="5377a369-e662-4295-92dd-450e2c476ce4">
-      <driver-ref>sqlserver.ms</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
-      <jdbc-url>jdbc:sqlserver://localhost:1433</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

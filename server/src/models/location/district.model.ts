@@ -1,13 +1,8 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes } from "sequelize";
 import sequelize from "../../database";
+import { IDistrict } from "../../types/ModelingEntity";
 
-export interface IDistrict extends Model {
-    code : number,
-    name : string,
-    division_type : string,
-    codename : string ,
-    province_code : number,
-}
+
 
 const District =sequelize.define<IDistrict>('District', {
     code :{

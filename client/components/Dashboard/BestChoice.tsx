@@ -1,9 +1,8 @@
 import React from "react";
-import DestHeadline from "../common/DestinationHeadline/DestHeadline";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
 import styled from "styled-components";
 import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { DestHeadline } from "components/common";
 const BestChoiceLayout = styled.div`
   display: flex;
   flex-grow: 1;
@@ -35,7 +34,6 @@ const BestChoiceHeader = styled.div`
 `;
 
 const BestChoiceContent = styled(Swiper)`
-
   width: 100%;
   height: 100%;
   .swiper-slide {
@@ -104,17 +102,15 @@ function BestChoice() {
         spaceBetween={10}
         slidesPerView={3}
         autoHeight
-        breakpoints={
-          {
-            // when window width is >= 320px  
-            768: {
-              slidesPerView: 5,
-            },
-            1024 :{
-              slidesPerView: 3,
-            }
-          }
-        }
+        breakpoints={{
+          // when window width is >= 320px
+          768: {
+            slidesPerView: 5,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+        }}
       >
         <SwiperSlide>
           <DestHeadline />

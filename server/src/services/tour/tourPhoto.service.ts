@@ -1,4 +1,6 @@
-import TourPhoto, { ITourPhoto, TourPhotoInstance } from "../../models/tour/tourPhoto.model";
+import TourPhoto, {  TourPhotoInstance } from "../../models/tour/tourPhoto.model";
+import { ITourPhoto } from "../../types/ModelingEntity";
+
 export interface ITourPhotoService {
     getAllTourPhotos(): Promise<ITourPhoto[]>;
     createTourPhoto(tourPhoto: ITourPhoto): Promise<TourPhotoInstance>;

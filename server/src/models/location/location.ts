@@ -1,8 +1,7 @@
 import axiosClient from "../../utils/axiosClient";
 import District from "./district.model";
-import Province from "./province";
+import Province from "./province.model";
 import Ward from "./ward.model";
-import fs from 'fs'
 export interface IProvince {
     code: number,
     name: string,

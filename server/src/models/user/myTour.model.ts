@@ -1,11 +1,8 @@
-import sequelize from "../../database"
-import { DataTypes, Model } from "sequelize"
-export interface IMyTour extends Model{
-    tourId : string ,
-    userId : string ,
-    active : boolean
-}
-const MyTour = sequelize.define<Model>("MyTour", {
+import { DataTypes } from "sequelize";
+import sequelize from "../../database";
+import { IMyTour } from "../../types/ModelingEntity";
+
+const MyTour = sequelize.define<IMyTour>("MyTour", {
     tourId :{
         type: DataTypes.STRING(150),
         primaryKey : true ,

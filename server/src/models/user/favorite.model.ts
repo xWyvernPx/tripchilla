@@ -1,10 +1,6 @@
-import sequelize from "../../database"
-import { DataTypes, Model } from "sequelize"
-export interface IFavorite extends Model {
-    tourId : string ,
-    userId : string,
-    active :  boolean
-}
+import { DataTypes } from "sequelize";
+import sequelize from "../../database";
+import { IFavorite } from "../../types/ModelingEntity";
 
 const Favorite = sequelize.define<IFavorite>("Favorite", {
     tourId :{

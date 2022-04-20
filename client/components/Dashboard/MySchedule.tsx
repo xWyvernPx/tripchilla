@@ -1,7 +1,7 @@
+import { IconBrandFlickr } from "@tabler/icons";
 import React from "react";
 import styled from "styled-components";
-import { IconBrandFlickr } from "@tabler/icons";
-import ScheduleCard from "../common/ScheduleCard/ScheduleCard";
+import { ScheduleCard } from "components/common";
 const Layout = styled.div`
   //dimesion
   width: 90%;

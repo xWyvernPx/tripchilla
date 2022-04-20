@@ -1,4 +1,5 @@
-import UserInfo, { IUserInfo, UserInfoInstance } from "../../models/user/info.model";
+import UserInfo, {  UserInfoInstance } from "../../models/user/info.model";
+import { IUserInfo } from "../../types/ModelingEntity";
 
 export interface IInfoService {
     createUserInfo(userInfo: IUserInfo): Promise<UserInfoInstance>;

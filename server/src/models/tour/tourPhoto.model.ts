@@ -1,10 +1,7 @@
 import sequelize from "../../database"
 import { DataTypes, Model, Optional } from "sequelize"
-export interface ITourPhoto {
-        id : number,
-        tourId : string , 
-        photo : Blob    
-}
+import { ITourPhoto } from "../../types/ModelingEntity";
+
 interface TourPhotoCreationAttributes extends Optional<ITourPhoto, "id"> { }
 export interface TourPhotoInstance extends Model<ITourPhoto, TourPhotoCreationAttributes> , ITourPhoto { }
 const TourPhoto = sequelize.define<TourPhotoInstance>("TourPhoto", {

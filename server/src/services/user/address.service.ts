@@ -1,4 +1,5 @@
-import Address, { AddressInstance, IAddress } from "../../models/user/address.model";
+import Address, { AddressInstance } from "../../models/user/address.model";
+import { IAddress } from "../../types/ModelingEntity";
 
 export interface IAddressService {
     getAddressById(id: number): Promise<AddressInstance |null >; 

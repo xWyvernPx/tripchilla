@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { IAddress } from "../../../models/user/address.model";
+
 import addressService from "../../../services/user/address.service";
+import { IAddress } from "../../../types/ModelingEntity";
 
 export interface IAddressController {
     // getAddress(req: Request, res: Response): Promise<Response>;

@@ -1,19 +1,8 @@
-import sequelize from "../../database"
-import { DataTypes, Model, Optional } from "sequelize"
-import joi,{Schema} from "joi"
-export interface ITour {
-    id ?: number ,
-    tourId:string,
-    name:string,
-    location: number ,
-    price_per_day:number,
-    created_by : string,
-    start : Date,
-    end : Date ,
-    rating : number,
-    limit_participants : number,
-     
-}
+import joi from "joi";
+import { DataTypes, Model, Optional } from "sequelize";
+import sequelize from "../../database";
+import { ITour } from "../../types/ModelingEntity";
+
 interface TourCreationAttributes extends Optional<ITour, "id"> { }
 export interface TourInstance extends ITour, Model<ITour, TourCreationAttributes> { }
 const Tour = sequelize.define<TourInstance>("Tour", {
@@ -33,7 +22,7 @@ const Tour = sequelize.define<TourInstance>("Tour", {
         type: DataTypes.SMALLINT,
         references : {
             model : "Province",
-            key:"code"
+            key:"code",
         }
     },
     created_by : {

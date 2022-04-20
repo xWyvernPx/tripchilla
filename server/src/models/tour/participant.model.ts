@@ -1,10 +1,7 @@
-import sequelize from "../../database"
-import { DataTypes, Model } from "sequelize"
-export interface IParicipant extends Model {
-    tourId : string , 
-    userId  : string ,
-    date_join : Date
-}
+import { DataTypes } from "sequelize";
+import sequelize from "../../database";
+import { IParicipant } from "../../types/ModelingEntity";
+
 const Participant = sequelize.define<IParicipant>("Participant", {
     tourId :{
         type: DataTypes.STRING(150),

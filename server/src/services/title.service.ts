@@ -1,4 +1,5 @@
-import Title, { ITitle } from "../models/user/title.model";
+import Title from "../models/user/title.model";
+import { ITitle } from "../types/ModelingEntity";
 
 interface ITitleService {
 }

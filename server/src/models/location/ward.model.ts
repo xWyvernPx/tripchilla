@@ -1,12 +1,7 @@
+import { DataTypes } from "sequelize";
 import sequelize from "../../database";
-import { DataTypes, Model } from "sequelize";
-export interface IWard extends Model {
-    code : number,
-    name : string,
-    division_type : string,
-    codename : string ,
-    district_code : number,
-}
+import { IWard } from "../../types/ModelingEntity";
+
 const Ward = sequelize.define<IWard>('Ward', {
     code :{
         type: DataTypes.SMALLINT,

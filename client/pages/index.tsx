@@ -1,20 +1,22 @@
 import type { NextPage } from "next";
 import { useCallback, useState } from "react";
 import styled from "styled-components";
-import AccountPanel from "../components/common/AccountPanel/AccountPanel";
-import Ads2 from "../components/common/Ads/Ads2";
-import Modal from "../components/common/Modal/Modal";
-import BestChoice from "../components/Dashboard/BestChoice";
-import DashboardHeader from "../components/Dashboard/DashboardHeader";
-import MySchedule from "../components/Dashboard/MySchedule";
-import Recommend from "../components/Dashboard/Recommend";
-import Upcoming from "../components/Dashboard/Upcoming";
+import { AccountPanel, Ads2, Modal } from "components/common";
+import {
+  BestChoice,
+  DashboardHeader,
+  MySchedule,
+  Recommend,
+  Upcoming,
+} from "../components/Dashboard/index";
+import useTrips from "hooks/useTrips";
 
 const Home: NextPage = () => {
   const [showModal, setShowModal] = useState({
     show: true,
     component: null,
   });
+  const { trips, getTourById } = useTrips();
   const handleCloseModal = useCallback(() => {
     setShowModal({
       show: false,

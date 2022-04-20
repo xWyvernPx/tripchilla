@@ -1,10 +1,7 @@
-import sequelize from "../../database"
-import { DataTypes, Model } from "sequelize"
-export interface ITitle extends Model{
-    level: number,
-    name : string ,
-    slug : string ,
-}
+import { DataTypes } from "sequelize";
+import sequelize from "../../database";
+import { ITitle } from "../../types/ModelingEntity";
+
 const Title = sequelize.define<ITitle>("Title", {
     level : {
         type: DataTypes.INTEGER,
