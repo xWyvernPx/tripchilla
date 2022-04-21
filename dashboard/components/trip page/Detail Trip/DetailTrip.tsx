@@ -1,5 +1,4 @@
-import { IconMapPin, IconStar, IconUsers, IconCalendar } from "@tabler/icons";
-import { ImageComponentProps } from "components/common/types/ImageProps";
+import { IconCalendar, IconMapPin, IconStar, IconUsers } from "@tabler/icons";
 import React from "react";
 import styled from "styled-components";
 

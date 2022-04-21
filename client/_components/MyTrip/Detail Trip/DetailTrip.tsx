@@ -10,7 +10,7 @@ const DetailTrip: React.FC<Props> = (props) => {
   const [trip, setTrip] = useState({});
   const { getTourById } = useTrips();
   useEffect(() => {
-    const data = getTourById(payload.tourId);
+    const data = getTourById(payload?.tourId);
     setTrip(data);
   }, [payload]);
   console.log(trip);

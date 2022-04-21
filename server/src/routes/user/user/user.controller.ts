@@ -24,7 +24,11 @@ class UserController {
       if (result) {
         const token = await JWT.encode({ userid: result.userid });
         res.setHeader("access_token", token);
-        res.status(200).json(result);
+        res.status(200).json({
+          status: "Success",
+          message: "Log in succesfully",
+          user: result,
+        });
       } else throw new Error("usernmae or password is incorrect!");
     } catch (err: any) {
       err.status = 400;

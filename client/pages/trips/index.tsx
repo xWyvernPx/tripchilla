@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import MyTrip from "../../components/MyTrip/MyTrip";
+import MyTrip from "../../_components/MyTrip/MyTrip";
 const TripsPage = () => {
   return (
     <StyledTripsPage>

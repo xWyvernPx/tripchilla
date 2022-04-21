@@ -1,20 +1,26 @@
 import type { NextPage } from "next";
 import { useCallback, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { AccountPanel, Ads2, Modal } from "components/common";
+import { AccountPanel, Ads2, Modal } from "_components/common";
+import { useNavigate } from "react-router-dom";
 import {
   BestChoice,
   DashboardHeader,
   MySchedule,
   Recommend,
   Upcoming,
-} from "../components/Dashboard/index";
+} from "../_components/Dashboard/index";
 import useTrips from "hooks/useTrips";
-import DetailTrip from "components/MyTrip/Detail Trip/DetailTrip";
+import DetailTrip from "_components/MyTrip/Detail Trip/DetailTrip";
+import LoginButton from "_components/common/AccountPanel/LoginButton/LoginButton";
+import LoginScreen from "_components/LoginScreen/LoginScreen";
+import { authAtom } from "_states";
 
 const Home: NextPage = () => {
+  const authState = useRecoilValue(authAtom);
   const [showModal, setShowModal] = useState({
-    show: true,
+    show: false,
     component: DetailTrip,
     payload: null,
   });
@@ -33,6 +39,15 @@ const Home: NextPage = () => {
       payload,
     });
   }, []);
+  const handleLoginButtonClick = useCallback((payload?: any) => {
+    setShowModal({
+      show: true,
+      component: LoginScreen,
+      payload,
+    });
+  }, []);
+  const navigate = useNavigate();
+  // if (authState)
   return (
     <DashboardLayout>
       <MainLayout>
@@ -44,7 +59,11 @@ const Home: NextPage = () => {
         </ContentBottom>
       </MainLayout>
       <RightSidebar>
-        <AccountPanel />
+        {authState ? (
+          <AccountPanel />
+        ) : (
+          <LoginButton handleClick={handleLoginButtonClick} />
+        )}
         <MySchedule />
         <Upcoming />
       </RightSidebar>

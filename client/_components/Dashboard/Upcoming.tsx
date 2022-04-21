@@ -1,11 +1,11 @@
-import { IconBrandFlickr } from "@tabler/icons";
 import React from "react";
 import styled from "styled-components";
-import { ScheduleCard } from "components/common";
+import { IconBrandFlickr } from "@tabler/icons";
+import { ScheduleCard } from "_components/common";
 const Layout = styled.div`
   //dimesion
   width: 90%;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 `;
 const LayoutHeadline = styled.div`
   //dimension
@@ -31,11 +31,11 @@ const ScheduleList = styled.div`
   flex-direction: column;
   gap: 0.5rem;
 `;
-function MySchedule() {
+function Upcoming() {
   return (
     <Layout>
       <LayoutHeadline>
-        <h2>My Schedule</h2>
+        <h2>Upcoming</h2>
         <IconBrandFlickr />
       </LayoutHeadline>
       <ScheduleList>
@@ -47,4 +47,4 @@ function MySchedule() {
   );
 }
 
-export default MySchedule;
+export default Upcoming;

@@ -22,34 +22,36 @@ class TourService {
         },
         include: [Province],
       }).then((tourInstance: any) => {
-        const {
-          id,
-          tourId,
-          name,
-          location,
-          created_by,
-          price_per_day,
-          start,
-          end,
-          rating,
-          limit_participants,
-        } = tourInstance.dataValues;
-        const tourResponse: TourType = {
-          id,
-          tourId,
-          name,
-          location,
-          created_by,
-          price_per_day,
-          start,
-          end,
-          rating,
-          limit_participants,
-          location_detail: tourInstance.dataValues.Province.dataValues
-            ? tourInstance.dataValues.Province.dataValues
-            : null,
-        };
-        return tourResponse;
+        if (tourInstance) {
+          const {
+            id,
+            tourId,
+            name,
+            location,
+            created_by,
+            price_per_day,
+            start,
+            end,
+            rating,
+            limit_participants,
+          } = tourInstance.dataValues;
+          const tourResponse: TourType = {
+            id,
+            tourId,
+            name,
+            location,
+            created_by,
+            price_per_day,
+            start,
+            end,
+            rating,
+            limit_participants,
+            location_detail: tourInstance.dataValues.Province.dataValues
+              ? tourInstance.dataValues.Province.dataValues
+              : null,
+          };
+          return tourResponse;
+        } else return null;
       });
       if (rs) return rs;
       else throw new Error("Tour not found");

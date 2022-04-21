@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { A11y, Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { DestinationCard } from "components/common";
+import { DestinationCard } from "_components/common";
 
 interface Props {
   listDestination: any;

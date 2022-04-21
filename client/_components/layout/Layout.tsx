@@ -6,6 +6,7 @@ import Sidebar from "../common/sidebar/Sidebar";
 import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import gsap from "gsap";
+import { Routes } from "react-router-dom";
 export const GlobalStyle = createGlobalStyle`
 
 :root {
@@ -14,16 +15,20 @@ export const GlobalStyle = createGlobalStyle`
     --lighter-primary-color: #a5ffe1;
     --gray: #72848c;
     --lighter-gray: #b7c6cc;
+    --darker-gray : #72848c37; 
     --white: #fff;
     --dark: #2b2945;
     --secondary-color: #ff8345;
     --secondary-background: #F5F9F8;
     --radius:.9rem;
     --layout-padding: 1.75rem;
+    --fs-xxs : .5rem;
+    --fs-xs: .8rem;
     --fs-small: 1rem;
     --fs-medium: 1.25rem;
     --fs-large: 1.5rem;
     --fs-xlarge: 2rem;
+    --fs-xxlarge: 2.5rem;
     --line-height-small: 1.5;
     --line-height-medium: 1.75;
     --line-height-large: 2;
@@ -90,6 +95,10 @@ export const GlobalStyle = createGlobalStyle`
    table {
        border-collapse: collapse;
        border-spacing: 0;
+   }
+   input {
+        outline: none;
+       text-decoration: none;
    }
    h1 {
          font-size: 1.8rem;
@@ -198,9 +207,7 @@ export const GlobalStyle = createGlobalStyle`
 
    }
   }
-  
 `;
-
 const AppLayout = styled.div`
   padding: var(--layout-padding);
   width: 100%;
@@ -293,6 +300,7 @@ function Layout(props: ComponentProps<any>) {
           </SidebarWrapper>
 
           {/* </div> */}
+
           <PageLayout>{children}</PageLayout>
         </AppLayout>
       </main>

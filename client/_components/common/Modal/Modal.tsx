@@ -24,7 +24,7 @@ const Modal: React.FC<ModalProps> = (props) => {
   return (
     <ModalWrapper>
       <CloseButton onClick={onCloseModal}>
-        <IconX />
+        <IconX color="white" />
       </CloseButton>
       {formComponent}
     </ModalWrapper>

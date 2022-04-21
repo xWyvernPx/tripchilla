@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "react-router-dom": "^6.3.0",
     "tedious": "^14.4.0"
   },
   "devDependencies": {

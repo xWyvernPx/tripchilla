@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { DestHeadline } from "components/common";
+import { DestHeadline } from "_components/common";
 const BestChoiceLayout = styled.div`
   display: flex;
   flex-grow: 1;
