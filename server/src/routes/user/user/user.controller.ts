@@ -35,5 +35,42 @@ class UserController {
       next(err);
     }
   }
+
+  async checkUsername(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { payload } = req.body;
+      const result = await userService.isDuplicate("username", payload);
+      if (result) {
+        res.status(200).json({
+          available: false,
+        });
+      } else
+        res.status(200).json({
+          available: true,
+        });
+    } catch (err: any) {
+      err.status = 400;
+      next(err);
+    }
+  }
+
+  async checkEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { payload } = req.body;
+      const result = await userService.isDuplicate("email", payload);
+
+      if (result) {
+        res.status(200).json({
+          available: false,
+        });
+      } else
+        res.status(200).json({
+          available: true,
+        });
+    } catch (err: any) {
+      err.status = 400;
+      next(err);
+    }
+  }
 }
 export default new UserController();

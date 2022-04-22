@@ -25,9 +25,10 @@ Passport.use(
       clientID:
         "792668566991-1bvu9uss47ldq2rd7qe9silc0mg715pi.apps.googleusercontent.com",
       clientSecret: "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",
-      callbackURL: "https://localhost:4000/auth/google/callback",
+      passReqToCallback: true,
+      callbackURL: "https://localhost:4000/api/auth/google/callback",
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
       const user = await userService.getUser({
         where: { email: profile.emails[0].value },
       });

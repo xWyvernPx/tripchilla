@@ -1,4 +1,9 @@
-import React, { ComponentProps, MouseEventHandler, useEffect } from "react";
+import React, {
+  ComponentProps,
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+} from "react";
 import styled from "styled-components";
 import { IconX } from "@tabler/icons";
 interface ModalProps {
@@ -7,19 +12,22 @@ interface ModalProps {
 }
 const Modal: React.FC<ModalProps> = (props) => {
   const { formComponent, onCloseModal } = props;
-  const exitPressHandler = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
-      onCloseModal(e as any);
-    }
-    console.log(e.key);
-  };
+  const exitPressHandler = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onCloseModal(e as any);
+      }
+    },
+    [onCloseModal]
+  );
+
   useEffect(() => {
     window.addEventListener("keydown", exitPressHandler);
 
     return () => {
       window.removeEventListener("keydown", exitPressHandler);
     };
-  }, []);
+  }, [exitPressHandler]);
 
   return (
     <ModalWrapper>

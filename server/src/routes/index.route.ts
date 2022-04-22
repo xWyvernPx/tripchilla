@@ -6,6 +6,7 @@ import tourRouter from "./tour/tour/tour.route";
 import UserRouter from "./user/user/user.route";
 import ggAuthRouter from "./auth/googleAuth";
 import Passport from "passport";
+import axios from "axios";
 export const launchRoute = (app: Application) => {
   app.get(
     "/",
@@ -16,7 +17,7 @@ export const launchRoute = (app: Application) => {
   );
   app.use("/api/user", UserRouter);
 
-  app.use("/auth/google", ggAuthRouter);
+  app.use("/api/auth/google", ggAuthRouter);
   app.use("/api/title", titleRoute);
   app.use("/api/address", AddressRoute);
   app.use("/api/tour", tourRouter);

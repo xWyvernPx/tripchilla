@@ -9,7 +9,7 @@ export const TextField = styled.div`
     props.width ? `width:${props.width};` : "width:100%;"}
   height: fit-content;
   padding: 0.75rem 1.5rem;
-
+  margin: 1.5rem 0;
   /* display */
   display: flex;
   align-items: center;
@@ -30,7 +30,7 @@ export const TextField = styled.div`
     height: fit-content;
     //display
     background-color: transparent;
-    transition: all 0.25s linear;
+    transition: all 0.2s linear;
     /* typo */
     color: var(--white);
     font-size: var(--fs-medium);
@@ -52,13 +52,15 @@ export const TextField = styled.div`
       }
     }
   }
+
   label {
     position: absolute;
     color: var(--gray);
     font-weight: 500;
     top: 50%;
     transform: translateY(-50%);
-    transition: all 0.25s linear;
+    transition: all 0.2s linear;
+    pointer-events: none;
   }
   svg {
     fill: var(--white);
@@ -79,6 +81,11 @@ export const TextField = styled.div`
     .error__trig {
       transform: scale(1) translate(100%, 0);
     }
+    @media screen and (max-width: 767.98px) {
+      .error__trig {
+        transform: scale(1) translate(0, -15%);
+      }
+    }
   }
 
   .form__error {
@@ -97,7 +104,7 @@ export const TextField = styled.div`
     transform: scale(0) translate(50%, 100%);
     /* transform: scale(1) translate(100%, 0); */
 
-    transition: all 0.25s linear;
+    transition: all 0.2s linear;
     /* typo */
     color: var(--white);
   }

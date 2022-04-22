@@ -11,7 +11,11 @@ const path = require("path");
 const morgan = require("morgan");
 const app: Application = express();
 app.use(helmet());
-app.use(cors({}));
+app.use(
+  cors({
+    origin: true,
+  })
+);
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

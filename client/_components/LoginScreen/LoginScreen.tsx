@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { TextField } from "_components/common/Field/TextField";
+import { TextField } from "_components/common/Form/TextField";
 import { AiFillIdcard } from "react-icons/ai";
+import ErrorState from "_components/common/Form/ErrorState";
+import SignUpForm from "_components/common/Form/SignUpForm";
+import LoginForm from "_components/common/Form/LoginForm";
 
 const LoginScreen = () => {
+  const [gotAccount, setGotAccount] = useState(true);
   return (
     <LoginScreenLayout>
-      <SignUpForm />
+      {gotAccount ? (
+        <LoginForm onChangeToSignUp={() => setGotAccount(false)} />
+      ) : (
+        <SignUpForm
+          onChangeToLogin={() => {
+            setGotAccount(true);
+          }}
+        />
+      )}
+      {/* <SignUpForm /> */}
       <LoginScreenBackground />
       <LoginScreenBackgroundFilter></LoginScreenBackgroundFilter>
     </LoginScreenLayout>
@@ -51,62 +64,4 @@ const LoginScreenBackgroundFilter = styled.div`
   z-index: -9;
 `;
 
-const FormLayout = styled.form`
-  /* dimension */
-  width: fit-content;
-  height: fit-content;
-  padding: 1rem;
-  margin-left: 4rem;
-  /* position */
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  //display
-  h3 {
-    color: var(--lighter-gray);
-    text-transform: uppercase;
-    font-size: var(--fs-medium);
-  }
-  h1 {
-    margin: 0.5rem 0;
-    height: fit-content;
-    color: var(--white);
-    font-size: var(--fs-xxlarge);
-
-    &:after {
-      content: ".";
-      color: var(--primary-color);
-      font-size: 3.5rem;
-    }
-  }
-  span {
-    margin-bottom: 2rem;
-    color: var(--lighter-gray);
-    font-size: var(--fs-medium);
-    display: inline-block;
-    button {
-      color: var(--primary-color);
-    }
-  }
-`;
-
-const SignUpForm: React.FC = () => {
-  return (
-    <FormLayout>
-      <h3>start for free</h3>
-      <h1>Create new account</h1>
-      <span>
-        Already a member? <button> Log in</button>
-      </span>
-
-      <TextField>
-        <input type="text" id="" placeholder=" "></input>
-        <label htmlFor=""> Name</label>
-        <span className="form__error ">This field is required</span>
-        {/* error__trig to trigger error */}
-        <AiFillIdcard />
-      </TextField>
-    </FormLayout>
-  );
-};
 export default LoginScreen;

@@ -16,7 +16,8 @@ ggAuthRouter.route("/callback").get(
   async (req, res) => {
     const { dataValues } = req.user as any;
     res.setHeader("access_token", await JWT.encode(dataValues.id));
-    res.redirect("http://localhost:3001/");
+    res.json(dataValues);
+    // res.redirect("http://localhost:3000",);
   }
 );
 export default ggAuthRouter;

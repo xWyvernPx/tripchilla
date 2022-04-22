@@ -10,5 +10,6 @@ UserRouter.route("/register").post(
   userController.register
 );
 UserRouter.route("/login").post(userController.login);
-
+UserRouter.post("/check-username", userController.checkUsername);
+UserRouter.post("/check-email", userController.checkEmail);
 export default UserRouter;
