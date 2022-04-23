@@ -15,6 +15,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import userApi from "api/users/user.api";
 import { useRouter } from "next/router";
+import axiosClient from "api/axiosClient";
 interface Props {
   onChangeToSignUp: Function;
 }
@@ -33,7 +34,9 @@ const LoginForm: React.FC<Props> = ({ onChangeToSignUp }) => {
     setError,
     clearErrors,
   } = useForm({ resolver: yupResolver(LoginSchema) });
-  const handleSubmitForm = async (data: any) => {};
+  const handleSubmitForm = async (data: any) => {
+    const rs = await axiosClient.post("/user/login", data);
+  };
   const route = useRouter();
   return (
     <LoginFormLayout
@@ -103,11 +106,29 @@ const LoginForm: React.FC<Props> = ({ onChangeToSignUp }) => {
         <MultiFieldsContainer>
           <SecondaryFormButton
             type="button"
-            onClick={() => userApi.loginGoogle()}
+            onClick={() => {
+              window.open(
+                "https://localhost:4000/api/auth/google",
+                "_blank",
+                `width=500,height=500,centerscreen=yes`
+              );
+            }}
           >
             Login with <IoLogoGoogle />
           </SecondaryFormButton>
-          <SecondaryFormButton onClick={() => userApi.loginGoogle()}>
+          <SecondaryFormButton
+            type="button"
+            onClick={async () => {
+              const da = await axiosClient.get("/", { withCredentials: true });
+              console.log(da);
+            }}
+          >
+            Demo
+          </SecondaryFormButton>
+
+          <SecondaryFormButton
+            onClick={() => route.push("https://localhost:4000/api/auth/google")}
+          >
             Login with <IoLogoFacebook />{" "}
           </SecondaryFormButton>
         </MultiFieldsContainer>

@@ -29,5 +29,10 @@ class UserAPI {
     const url = `/auth/google/callback`;
     axiosClient.get(url);
   }
+  async register(user: { username: string; email: string; password: string }) {
+    const url = `/user/register`;
+    const data = await axiosClient.post(url, user);
+    if (data) return data;
+  }
 }
 export default new UserAPI();

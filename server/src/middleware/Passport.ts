@@ -5,6 +5,10 @@ import { Strategy as GithubStrategy } from "passport-github2";
 import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
 import userService from "../services/user/user.service";
 import { imageUrlToBase64 } from "../utils/imageUrlToBase64";
+import { Strategy as LocalStrategy } from "passport-local";
+import JWT from "../utils/JWT";
+import { User } from "../models";
+import bcrypt from "bcrypt";
 
 Passport.use(
   new JWTStrategy(
@@ -29,15 +33,16 @@ Passport.use(
       callbackURL: "https://localhost:4000/api/auth/google/callback",
     },
     async (req, accessToken, refreshToken, profile, done) => {
-      const user = await userService.getUser({
+      const user: any = await userService.getUser({
         where: { email: profile.emails[0].value },
+        raw: true,
       });
       if (user) {
         done(null, user);
       } else {
         const ava = await imageUrlToBase64(profile.photos[0].value);
         const username = profile.emails[0].value.split("@")[0];
-        const newUser = await userService.register({
+        const newUser: any = await userService.register({
           email: profile.emails[0].value,
           password: "",
           username: username,
@@ -45,7 +50,58 @@ Passport.use(
         });
         done(null, newUser);
       }
-      console.log(profile);
     }
   )
 );
+Passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const rs = await User.findOne({
+        where: {
+          username: username,
+        },
+        raw: true,
+      });
+      if (rs) {
+        const isMatch = await bcrypt.compare(password, rs.password);
+        if (isMatch) {
+          done(null, rs);
+        } else {
+          done(new Error("Username or password are wrong."), null);
+        }
+      }
+    } catch (error) {
+      // const err: any = new Error("Username or password are wrong.");
+      // err.status = 400;
+      done({ message: "Username or password are wrong.", status: 400 }, null);
+    }
+  })
+);
+Passport.use(
+  "local-register",
+  new LocalStrategy(
+    {
+      passReqToCallback: true,
+    },
+    async (req, username, password, done) => {
+      try {
+        const payload = req.body;
+        const result = await userService.register(payload);
+        if (result) {
+          done(null, result);
+        } else throw new Error("User not created!");
+      } catch (error: any) {
+        error.status = 400;
+        done(error, null);
+      }
+    }
+  )
+);
+Passport.serializeUser((user: any, done) => {
+  console.log(user);
+  done(null, user.userid);
+});
+
+Passport.deserializeUser((userid, done) => {
+  done(null, userid);
+});

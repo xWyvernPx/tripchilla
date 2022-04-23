@@ -8,9 +8,11 @@ class UserController {
       const payload = req.body;
       const result = await userService.register(payload, next);
       if (result) {
-        const token = await JWT.encode({ userid: result.userid });
-        res.setHeader("access_token", token);
-        res.status(201).json(result);
+        req.body = { username: result.username, password: result.password };
+        res.json({
+          message: "Register success",
+          data: result,
+        });
       } else throw new Error("User not created!");
     } catch (error: any) {
       error.status = 400;
@@ -22,8 +24,6 @@ class UserController {
       const payload = req.body;
       const result = await userService.login(payload);
       if (result) {
-        const token = await JWT.encode({ userid: result.userid });
-        res.setHeader("access_token", token);
         res.status(200).json({
           status: "Success",
           message: "Log in succesfully",

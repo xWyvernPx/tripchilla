@@ -7,12 +7,15 @@ import UserRouter from "./user/user/user.route";
 import ggAuthRouter from "./auth/googleAuth";
 import Passport from "passport";
 import axios from "axios";
+import isAuthorized from "../middleware/isAuthorized";
+import passport from "passport";
 export const launchRoute = (app: Application) => {
   app.get(
-    "/",
-    Passport.authenticate("jwt", { session: false }),
+    "/api/",
+    // passport.authenticate("local"),
+    isAuthorized,
     (req: Request, res: Response) => {
-      res.send("Demo");
+      res.json("Demo");
     }
   );
   app.use("/api/user", UserRouter);

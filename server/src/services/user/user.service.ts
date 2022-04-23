@@ -102,7 +102,7 @@ class UserService implements IUserService {
           infoid,
           level: 1,
         },
-        { transaction: createUserTransaction }
+        { transaction: createUserTransaction, raw: true }
       );
       createUserTransaction.commit();
       return resultCreateUser;

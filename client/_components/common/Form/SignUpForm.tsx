@@ -80,14 +80,14 @@ const SignUpForm: React.FC<Props> = ({ onChangeToLogin }) => {
   };
 
   const handleSubmitForm = async (data: any) => {
-    console.log(data);
-    const [email, username] = await Promise.all([
-      userApi.checkEmail(data.email),
-      userApi.checkUserName(data.username),
-    ]);
-
-    console.log(email);
-    console.log(username);
+    const { username, email, password } = data;
+    const user = {
+      username,
+      email,
+      password,
+    };
+    const rs = await userApi.register(user);
+    console.log(rs);
   };
 
   return (

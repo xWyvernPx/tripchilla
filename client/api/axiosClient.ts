@@ -5,6 +5,7 @@ import getToken from "_helpers/getToken";
 
 export const axiosClient = axios.create({
   baseURL: "https://localhost:4000/api",
+  withCredentials: true,
 
   httpsAgent: new https.Agent({
     rejectUnauthorized: false,
