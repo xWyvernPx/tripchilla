@@ -10,12 +10,18 @@ UserRouter.route("/register").post(
   validateBody(userSchema.userBodySchema),
   passport.authenticate("local-register", { session: true }),
   (req, res) => {
-    res.json(req.user);
+    res.json({
+      status: "success",
+      message: "User registered successfully!",
+    });
   }
 );
 UserRouter.route("/login").post(passport.authenticate("local"), (req, res) => {
   console.log(req.user);
-  res.json(req.user);
+  res.json({
+    status: "success",
+    message: "You are successfully logged in!",
+  });
 });
 UserRouter.post("/check-username", userController.checkUsername);
 UserRouter.post("/check-email", userController.checkEmail);

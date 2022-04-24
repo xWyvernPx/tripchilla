@@ -1,16 +1,20 @@
 import React, { useCallback, useState } from "react";
 import ErrorState from "./ErrorState";
 import { TextField } from "./TextField";
+import { IoPerson, IoLockClosed } from "react-icons/io5";
 import {
-  IoMail,
-  IoPerson,
-  IoLockClosed,
-  IoLogoGoogle,
-  IoLogoFacebook,
-} from "react-icons/io5";
+  IconBrandGoogle,
+  IconBrandFacebook,
+  IconBrandGithub,
+} from "@tabler/icons";
 import styled from "styled-components";
 import { PrimaryFormButton, SecondaryFormButton } from "./FormButton";
-import { useForm, Controller } from "react-hook-form";
+import {
+  useForm,
+  Controller,
+  SubmitHandler,
+  FieldValues,
+} from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import userApi from "api/users/user.api";
@@ -18,6 +22,7 @@ import { useRouter } from "next/router";
 import axiosClient from "api/axiosClient";
 interface Props {
   onChangeToSignUp: Function;
+  handleSubmitForm: SubmitHandler<FieldValues>;
 }
 const LoginSchema = yup
   .object({
@@ -25,18 +30,14 @@ const LoginSchema = yup
     password: yup.string().required("Password is required"),
   })
   .required();
-const LoginForm: React.FC<Props> = ({ onChangeToSignUp }) => {
+const LoginForm: React.FC<Props> = ({ onChangeToSignUp, handleSubmitForm }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    setError,
-    clearErrors,
   } = useForm({ resolver: yupResolver(LoginSchema) });
-  const handleSubmitForm = async (data: any) => {
-    const rs = await axiosClient.post("/user/login", data);
-  };
+
   const route = useRouter();
   return (
     <LoginFormLayout
@@ -114,22 +115,18 @@ const LoginForm: React.FC<Props> = ({ onChangeToSignUp }) => {
               );
             }}
           >
-            Login with <IoLogoGoogle />
-          </SecondaryFormButton>
-          <SecondaryFormButton
-            type="button"
-            onClick={async () => {
-              const da = await axiosClient.get("/", { withCredentials: true });
-              console.log(da);
-            }}
-          >
-            Demo
+            <IconBrandGoogle />
           </SecondaryFormButton>
 
           <SecondaryFormButton
             onClick={() => route.push("https://localhost:4000/api/auth/google")}
           >
-            Login with <IoLogoFacebook />{" "}
+            <IconBrandFacebook />{" "}
+          </SecondaryFormButton>
+          <SecondaryFormButton
+            onClick={() => route.push("https://localhost:4000/api/auth/google")}
+          >
+            <IconBrandGithub />{" "}
           </SecondaryFormButton>
         </MultiFieldsContainer>
       </FieldsLayout>

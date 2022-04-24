@@ -5,13 +5,48 @@ import { AiFillIdcard } from "react-icons/ai";
 import ErrorState from "_components/common/Form/ErrorState";
 import SignUpForm from "_components/common/Form/SignUpForm";
 import LoginForm from "_components/common/Form/LoginForm";
-
+import FlashMessage from "_components/common/Form/FlashMessage";
+import { FieldValues } from "react-hook-form";
 const LoginScreen = () => {
   const [gotAccount, setGotAccount] = useState(true);
+  const [flashMessage, setFlashMessage] = useState<{
+    message: string;
+    type: "success" | "error";
+    show: boolean;
+    buttonContent?: string;
+    buttonHandle?: Function;
+  }>({
+    message: "",
+    type: "success",
+    show: true,
+    buttonContent: "",
+    buttonHandle: () => {},
+  });
+  const loginSubmitHandle = (data: FieldValues) => {
+    console.log(data);
+  };
+  const registerSubmitHandle = (data: FieldValues) => {
+    console.log(data);
+  };
   return (
     <LoginScreenLayout>
+      {flashMessage.show ? (
+        <FlashMessage
+          style={{
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+          handleClose={() => setFlashMessage({ ...flashMessage, show: false })}
+          type={flashMessage.type}
+          message={flashMessage.message}
+        />
+      ) : null}
       {gotAccount ? (
-        <LoginForm onChangeToSignUp={() => setGotAccount(false)} />
+        <LoginForm
+          handleSubmitForm={loginSubmitHandle}
+          onChangeToSignUp={() => setGotAccount(false)}
+        />
       ) : (
         <SignUpForm
           onChangeToLogin={() => {
