@@ -10,7 +10,7 @@ import {
   MySchedule,
   Recommend,
   Upcoming,
-} from "../_components/Dashboard/index";
+} from "../_components/Dashboard";
 import useTrips from "hooks/useTrips";
 import DetailTrip from "_components/MyTrip/Detail Trip/DetailTrip";
 import LoginButton from "_components/common/AccountPanel/LoginButton/LoginButton";

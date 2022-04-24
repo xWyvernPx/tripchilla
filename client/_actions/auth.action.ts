@@ -9,7 +9,7 @@ const useAuth = () => {
   const login = useCallback(
     async (payload: LoginPayload) => {
       return await AuthApi.login(payload)
-        .then((user) => {
+        .then((user: any) => {
           setAuth(user);
           return true;
         })

@@ -2,7 +2,7 @@ import { IconLogout } from "@tabler/icons";
 import Head from "next/head";
 import Image from "next/image";
 import React, { ComponentProps, ReactChildren, useEffect } from "react";
-import Sidebar from "../common/sidebar/Sidebar";
+import Sidebar from "./sidebar/Sidebar";
 import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import gsap from "gsap";
