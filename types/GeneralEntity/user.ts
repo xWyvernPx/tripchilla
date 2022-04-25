@@ -43,7 +43,7 @@ export interface UserType {
   userid?: string;
   username: string;
   password: string;
-  ava: Blob;
+  ava: string;
   email: string;
   infoid?: number;
   level?: number;

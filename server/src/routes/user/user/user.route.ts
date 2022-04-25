@@ -1,10 +1,13 @@
 import express from "express";
 import passport, { session } from "passport";
+import checkAuth from "../../../middleware/isAuthorized";
 import { userSchema } from "../../../models/user/user.model";
 import userService from "../../../services/user/user.service";
 import { validateBody } from "../../../utils/ValidateFunc";
 import userController from "./user.controller";
 const UserRouter = express.Router();
+
+UserRouter.get("/full", checkAuth, userController.getFullUser);
 
 UserRouter.route("/register").post(
   validateBody(userSchema.userBodySchema),
@@ -19,7 +22,6 @@ UserRouter.route("/register").post(
 UserRouter.route("/login").post(
   passport.authenticate("local", {
     session: true,
-    successRedirect: "http://localhost:3000/",
   }),
   (req, res, next) => {
     const { passport } = req.session as any;
@@ -30,6 +32,11 @@ UserRouter.route("/login").post(
     });
   }
 );
+UserRouter.route("/logout").get((req, res) => {
+  req.logout();
+  res.redirect("http://localhost:3000/");
+});
 UserRouter.post("/check-username", userController.checkUsername);
 UserRouter.post("/check-email", userController.checkEmail);
+
 export default UserRouter;

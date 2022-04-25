@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { TextField } from "_components/common/Form/TextField";
 import { AiFillIdcard } from "react-icons/ai";
@@ -9,7 +9,9 @@ import FlashMessage from "_components/common/Form/FlashMessage";
 import { FieldValues } from "react-hook-form";
 import userApi from "api/users/user.api";
 import { Loader } from "_components/common";
-const LoginScreen = () => {
+import { route } from "next/dist/server/router";
+import useAuth from "../../_actions/auth.action";
+const LoginScreen: React.FC<{ closeModal?: Function }> = ({ closeModal }) => {
   ////PERFORMANCE CHECK
   useEffect(() => {
     console.log("login screen rendered");
@@ -19,6 +21,8 @@ const LoginScreen = () => {
   const [gotAccount, setGotAccount] = useState(true);
   const [resetTrigger, setResetTrigger] = useState(false);
   const [resetTriggerReg, setResetTriggerReg] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { getSaveUser } = useAuth();
   const [flashMessage, setFlashMessage] = useState<{
     message: string;
     type: "success" | "error";
@@ -33,17 +37,23 @@ const LoginScreen = () => {
     buttonHandle: () => {},
   });
   const loginSubmitHandle = async (data: FieldValues) => {
+    setLoading(true);
     const { username, password } = data;
     const result: any = await userApi.login({ username, password });
     if (result.status === "success") {
+      setLoading(false);
+      getSaveUser();
       setFlashMessage({
         message: result.message,
         type: "success",
         show: true,
         buttonContent: "Let's go",
-        buttonHandle: () => {},
+        buttonHandle: () => {
+          closeModal();
+        },
       });
     } else {
+      setLoading(false);
       setFlashMessage({
         message: result.message,
         type: "error",
@@ -61,18 +71,24 @@ const LoginScreen = () => {
   };
 
   const registerSubmitHandle = async (data: FieldValues) => {
+    setLoading(true);
     const { username, password, email } = data;
     const result: any = await userApi.register({ email, username, password });
     console.log(result);
     if (result.status === "success") {
+      setLoading(false);
+      getSaveUser();
       setFlashMessage({
         message: result.message,
         type: "success",
         show: true,
         buttonContent: "Let's go",
-        buttonHandle: () => {},
+        buttonHandle: () => {
+          closeModal();
+        },
       });
     } else {
+      setLoading(false);
       setFlashMessage({
         message: result.message,
         type: "error",
@@ -87,8 +103,35 @@ const LoginScreen = () => {
         },
       });
     }
-    console.log(username);
   };
+
+  const oauthButtonsHandler = useMemo(
+    () => ({
+      google: async () => {
+        const newWindow = window.open(
+          "https://localhost:4000/api/auth/google",
+          "_blank",
+          "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400"
+        );
+        const timer = setInterval(() => {
+          if (newWindow.closed) {
+            clearInterval(timer);
+            getSaveUser();
+            setFlashMessage({
+              message: "You have been logged in",
+              type: "success",
+              show: true,
+              buttonContent: "Let's go",
+              buttonHandle: () => {
+                closeModal();
+              },
+            });
+          }
+        });
+      },
+    }),
+    []
+  );
   return (
     <LoginScreenLayout>
       {flashMessage.show ? (
@@ -110,6 +153,7 @@ const LoginScreen = () => {
           handleSubmitForm={loginSubmitHandle}
           onChangeToSignUp={() => setGotAccount(false)}
           resetFieldTrigger={resetTrigger}
+          oauthButtonsHandler={oauthButtonsHandler}
         />
       ) : (
         <SignUpForm
@@ -120,7 +164,7 @@ const LoginScreen = () => {
           handleSubmitForm={registerSubmitHandle}
         />
       )}
-      {/* <Loader /> */}
+      {loading && <Loader />}
       <LoginScreenBackground />
       <LoginScreenBackgroundFilter></LoginScreenBackgroundFilter>
     </LoginScreenLayout>

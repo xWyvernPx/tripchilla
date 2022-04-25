@@ -28,7 +28,7 @@ const User = sequelize.define<UserInstance>(
       type: DataTypes.STRING(150),
     },
     ava: {
-      type: DataTypes.BLOB,
+      type: DataTypes.STRING,
     },
     email: {
       type: DataTypes.STRING(50),

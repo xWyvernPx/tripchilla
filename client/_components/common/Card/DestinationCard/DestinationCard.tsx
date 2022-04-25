@@ -2,6 +2,7 @@ import React, { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { IconMapPin, IconStar } from "@tabler/icons";
 import Image from "next/image";
+import { spawn } from "child_process";
 
 interface backgroundUrl {
   backgroundUrl?: string;
@@ -20,7 +21,10 @@ const DestinationCard: React.FC<DestCardProps> = (props) => {
         id="destcardbg"
         backgroundUrl="https://img.freepik.com/free-vector/outdoor-nature-adventure-camping-illustration-cartoon-flat-tourist-camp-with-picnic-spot-tent-among-forest-mountain-landscape_1150-37344.jpg?t=st=1649253110~exp=1649253710~hmac=8a9a79b71b0659ebdf97e4a712bd7f30a6899129749e780efe4205deb50227d8&w=2000"
       ></CardBackground>
-      <h3>{data && data.name}</h3>
+      <h3>
+        {data && data.name}
+        <span>{data && data.name}</span>
+      </h3>
       <div>
         <Properties>
           <IconMapPin />
@@ -39,7 +43,7 @@ const CardWrapper = styled.div`
   position: relative;
   padding: 1.5rem;
   /* width: 12rem; */
-  width: max-content;
+  width: fit-content;
   min-width: fit-content;
   /* height: 16rem; */
   aspect-ratio: 3/4;
@@ -54,13 +58,21 @@ const CardWrapper = styled.div`
   cursor: pointer;
   box-shadow: 0px 10px 18px -5px rgba(0, 0, 0, 0.25);
   h3 {
+    max-width: 12rem;
     color: var(--white);
     font-weight: semi-bold;
     z-index: 1;
+
+    text-overflow: ellipsis;
+    line-clamp: 3;
+    /* white-space: nowrap; */
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
   }
   div {
     display: flex;
-    gap: 1rem;
   }
 
   &:hover {
@@ -68,8 +80,30 @@ const CardWrapper = styled.div`
       transform: scale(1.1);
     }
   }
+  @media screen and (max-width: 1629.98px) {
+    padding: 1rem;
+  }
+  @media screen and (max-width: 1099.98px) {
+    h3 {
+      max-width: 14rem;
+    }
+  }
+  @media screen and (max-width: 767.98px) {
+    h3 {
+      max-width: 9rem;
+      -webkit-line-clamp: 2;
+    }
+  }
+  @media screen and (max-width: 640.98px) {
+    padding: 0.5rem;
+    h3 {
+      max-width: 8.5rem;
+      -webkit-line-clamp: 2;
+    }
+  }
 `;
 const Properties = styled.div`
+  margin-right: 0.5rem;
   display: flex;
   gap: 0.05rem;
   justify-content: center;
@@ -82,6 +116,9 @@ const Properties = styled.div`
   h4 {
     font-weight: normal;
     z-index: 1;
+  }
+  @media screen and (max-width: 1023.98px) {
+    gap: unset;
   }
 `;
 const CardBackground = styled.div`

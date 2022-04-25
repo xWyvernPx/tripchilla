@@ -19,7 +19,9 @@ app.use(helmet());
 app.use(
   cors({
     // methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: "include",
+    origin: "http://localhost:3000",
+
+    credentials: true,
   })
 );
 app.use(
@@ -38,6 +40,8 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     maxAge: 24 * 60 * 60 * 1000,
     secure: true,
+    overwrite: true,
+    httpOnly: true,
     path: "/",
   })
 );

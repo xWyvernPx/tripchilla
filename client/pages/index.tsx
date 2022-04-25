@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { AccountPanel, Ads2, Modal } from "_components/common";
@@ -16,15 +16,21 @@ import DetailTrip from "_components/MyTrip/Detail Trip/DetailTrip";
 import LoginButton from "_components/common/AccountPanel/LoginButton/LoginButton";
 import LoginScreen from "_components/LoginScreen/LoginScreen";
 import { authAtom } from "_states";
+import useAuth from "_actions/auth.action";
 
 const Home: NextPage = () => {
+  const { trips, getTourById } = useTrips();
+  const { getSaveUser } = useAuth();
+  useEffect(() => {
+    getSaveUser();
+  }, []);
+
   const authState = useRecoilValue(authAtom);
   const [showModal, setShowModal] = useState({
     show: false,
-    component: DetailTrip,
+    component: null,
     payload: null,
   });
-  const { trips, getTourById } = useTrips();
   const handleCloseModal = useCallback(() => {
     setShowModal({
       ...showModal,
@@ -72,6 +78,7 @@ const Home: NextPage = () => {
           onCloseModal={handleCloseModal}
           formComponent={
             <showModal.component
+              closeModal={handleCloseModal}
               payload={showModal.payload}
             ></showModal.component>
           }

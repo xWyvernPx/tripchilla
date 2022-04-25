@@ -26,7 +26,8 @@ const useTrips = () => {
   );
   const getTourById = useCallback(
     async (id: string) => {
-      return await tripApi.getTripById(id);
+      const data = await tripApi.getTripById(id);
+      if (data) return data.data;
     },
     [getAllTrips]
   );

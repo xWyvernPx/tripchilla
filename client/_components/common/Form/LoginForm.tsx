@@ -24,6 +24,11 @@ interface Props {
   onChangeToSignUp: Function;
   handleSubmitForm: SubmitHandler<FieldValues>;
   resetFieldTrigger?: boolean;
+  oauthButtonsHandler?: {
+    google?: Function;
+    facebook?: Function;
+    github?: Function;
+  };
 }
 const LoginSchema = yup
   .object({
@@ -35,6 +40,7 @@ const LoginForm: React.FC<Props> = ({
   onChangeToSignUp,
   handleSubmitForm,
   resetFieldTrigger,
+  oauthButtonsHandler,
 }) => {
   const {
     register,
@@ -116,13 +122,13 @@ const LoginForm: React.FC<Props> = ({
         <MultiFieldsContainer>
           <SecondaryFormButton
             type="button"
-            onClick={() => {
-              window.open(
-                "https://localhost:4000/api/auth/google",
-                "_blank",
-                `width=500,height=500,centerscreen=yes`
-              );
-            }}
+            onClick={
+              oauthButtonsHandler?.google
+                ? () => oauthButtonsHandler.google()
+                : () => {
+                    console.log("This function not available now");
+                  }
+            }
           >
             <IconBrandGoogle />
           </SecondaryFormButton>

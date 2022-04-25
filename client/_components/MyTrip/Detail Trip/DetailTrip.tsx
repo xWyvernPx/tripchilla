@@ -1,43 +1,63 @@
 import { IconCalendar, IconMapPin, IconStar, IconUsers } from "@tabler/icons";
 import useTrips from "hooks/useTrips";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
+import { blobToBase64 } from "_helpers/bufferToString";
 interface Props {
   payload: any;
 }
 const DetailTrip: React.FC<Props> = (props) => {
   const { payload } = props;
-  const [trip, setTrip] = useState({});
+  const [trip, setTrip] = useState(null);
   const { getTourById } = useTrips();
-  useEffect(() => {
-    const data = getTourById(payload?.tourId);
-    setTrip(data);
+  const [tripImages, setTripImages] = useState({
+    coverImage: null,
+  });
+  const fetchTrip = useCallback(async () => {
+    const trip = await getTourById(payload.tourid);
+
+    setTrip(trip);
   }, [payload]);
-  console.log(trip);
+  useEffect(() => {
+    // console.log(payload);
+    fetchTrip();
+  }, [payload]);
+  useEffect(() => {
+    if (trip) {
+      blobToBase64(trip.tour_photo[0]?.photo).then((data) =>
+        setTripImages({
+          coverImage: data,
+        })
+      );
+    }
+  }, [trip]);
+  console.log(tripImages?.coverImage);
   return (
     <DetailLayout>
-      <CoverImage></CoverImage>
+      <CoverImage src={tripImages?.coverImage}></CoverImage>
       <div className="heading">
         <PrimaryImage />
         <div className="information">
-          <TripName>Tour Around Xuan Huong Lake</TripName>
+          <TripName>{trip?.name}</TripName>
           <BriefInfo>
             <div className="participants">
               <IconUsers />
-              <span>4/8</span>
+              <span>{`${trip?.participants?.length || 0}/${
+                trip?.limit_participants
+              }`}</span>
             </div>
             <div className="rating">
               <IconStar />
-              <span>4.5</span>
+              <span>{trip?.rating}</span>
             </div>
             <div className="location">
               <IconMapPin />
-              <span>Da Lat</span>
+              <span>{trip?.location_detail?.name}</span>
             </div>
           </BriefInfo>
           <Schedule>
-            <DateBlock date={new Date()} /> -
-            <DateBlock date={new Date()} />
+            <DateBlock date={new Date(trip?.start)} /> -
+            <DateBlock date={new Date(trip?.end)} />
           </Schedule>
           <InteractiveButtons>
             <button>Join This Tour</button>
@@ -140,14 +160,21 @@ const DetailLayout = styled.div`
     }
   }
 `;
-
+interface CoverImageProps {
+  src?: string;
+}
 const CoverImage = styled.div`
   //dimension
   width: 100%;
   height: 40%;
 
   //display
-  background-color: red;
+  background: ${(props: CoverImageProps) =>
+    props.src
+      ? `url(data:image/jpeg;base64,${props.src})`
+      : `url(https://source.unsplash.com/random)`};
+  background-size: cover;
+  background-position: center;
   /* postion */
   position: relative;
   top: 0;

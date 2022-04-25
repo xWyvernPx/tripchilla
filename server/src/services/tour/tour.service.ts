@@ -57,9 +57,10 @@ class TourService implements ITourService {
           participants: tourInstance.dataValues.Users.dataValues
             ? tourInstance.dataValues.Users.dataValues
             : null,
-          tour_photo: tourInstance.dataValues.TourPhotos.dataValues
-            ? tourInstance.dataValues.TourPhotos.dataValues
+          tour_photo: tourInstance.dataValues.TourPhotos
+            ? tourInstance.dataValues.TourPhotos
             : null,
+          // ...rest,
         };
         return tourResponse;
       } else return null;

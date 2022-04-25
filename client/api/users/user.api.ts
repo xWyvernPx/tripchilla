@@ -41,5 +41,12 @@ class UserAPI {
       .then((res) => res)
       .catch((err) => err);
   }
+  async getFullUser() {
+    const url = `/user/full`;
+    const data: any = await axiosClient.get(url);
+    if (data.status === "success") return data.data;
+    else return null;
+  }
 }
+
 export default new UserAPI();

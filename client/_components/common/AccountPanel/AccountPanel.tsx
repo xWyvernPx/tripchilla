@@ -1,9 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IconChevronDown } from "@tabler/icons";
 import Panel from "./Panel";
+import { useRecoilValue } from "recoil";
+import { authAtom } from "_states";
+import { title } from "process";
+import { blobToBase64 } from "_helpers/bufferToString";
+
 interface IProps {
-  backgroundUrl: string;
+  backgroundBlob?: Buffer;
+}
+
+function AccountPanel() {
+  const [isOpen, setIsOpen] = useState(false);
+  const chevronRef = React.useRef(null);
+  const [ava, setAva] = useState(null);
+  const user: any = useRecoilValue(authAtom);
+  useEffect(() => {
+    if (user.ava) {
+      blobToBase64(user.ava).then((base64) => {
+        setAva(base64);
+      });
+    }
+  }, [user]);
+  return (
+    <AccountPanelLayout
+      onClick={() => setIsOpen(!isOpen)}
+      onBlur={() => setIsOpen(false)}
+    >
+      <AccountAvatar backgroundBlob={ava} />
+      <AccountName>
+        <h3>{`@${user && user.username}`}</h3>
+        <h4>{user && user.Title.name}</h4>
+      </AccountName>
+      <IconChevronDown className={isOpen ? "rotate" : ""} />
+      {isOpen && <Panel />}
+    </AccountPanelLayout>
+  );
 }
 const AccountPanelLayout = styled.button`
   width: fit-content;
@@ -25,7 +58,10 @@ const AccountAvatar = styled.div`
   height: 3rem;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  background: url(${(props: IProps) => props.backgroundUrl});
+  background: ${(props: IProps) =>
+    props.backgroundBlob
+      ? `url(data:image/jpeg;base64,${props.backgroundBlob})`
+      : `url(https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60)`};
   background-size: cover;
   background-position: center;
 `;
@@ -43,24 +79,4 @@ const AccountName = styled.div`
     color: var(--gray);
   }
 `;
-function AccountPanel() {
-  const [isOpen, setIsOpen] = useState(false);
-  const chevronRef = React.useRef(null);
-
-  return (
-    <AccountPanelLayout
-      onClick={() => setIsOpen(!isOpen)}
-      onBlur={() => setIsOpen(false)}
-    >
-      <AccountAvatar backgroundUrl="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
-      <AccountName>
-        <h3>Jeremy Zuck</h3>
-        <h4>Traveler Enthusiast</h4>
-      </AccountName>
-      <IconChevronDown className={isOpen ? "rotate" : ""} />
-      {isOpen && <Panel />}
-    </AccountPanelLayout>
-  );
-}
-
 export default AccountPanel;

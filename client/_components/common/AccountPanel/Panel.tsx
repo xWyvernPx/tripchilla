@@ -2,6 +2,46 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import gsap from "gsap";
+import axiosClient from "api/axiosClient";
+
+function Panel() {
+  const panelRef = React.useRef(null);
+  useEffect(() => {
+    gsap
+      .from(panelRef.current!, {
+        opacity: 0,
+        scale: 0,
+        y: -100,
+      })
+      .duration(0.2);
+    gsap.to(panelRef.current!, { opacity: 1, scale: 1, y: 0 });
+    return () => {};
+  }, [panelRef]);
+
+  return (
+    <PanelLayout ref={panelRef}>
+      <li>
+        <Link href="/#" passHref>
+          <CustomLink>Account</CustomLink>
+        </Link>
+      </li>
+      <li>
+        <Link href="/#" passHref>
+          <CustomLink>Setting</CustomLink>
+        </Link>
+      </li>
+      <li>
+        <span
+          onClick={() => {
+            axiosClient.get("/user/logout");
+          }}
+        >
+          Logout
+        </span>
+      </li>
+    </PanelLayout>
+  );
+}
 const PanelLayout = styled.ul`
   display: flex;
   flex-direction: column;
@@ -63,39 +103,4 @@ const CustomLink = styled.a`
     opacity: 1;
   }
 `;
-function Panel() {
-  const panelRef = React.useRef(null);
-  useEffect(() => {
-    gsap
-      .from(panelRef.current!, {
-        opacity: 0,
-        scale: 0,
-        y: -100,
-      })
-      .duration(0.2);
-    gsap.to(panelRef.current!, { opacity: 1, scale: 1, y: 0 });
-    return () => {};
-  }, [panelRef]);
-
-  return (
-    <PanelLayout ref={panelRef}>
-      <li>
-        <Link href="/#" passHref>
-          <CustomLink>Account</CustomLink>
-        </Link>
-      </li>
-      <li>
-        <Link href="/#" passHref>
-          <CustomLink>Setting</CustomLink>
-        </Link>
-      </li>
-      <li>
-        <Link href="/#" passHref>
-          <CustomLink>Logout</CustomLink>
-        </Link>
-      </li>
-    </PanelLayout>
-  );
-}
-
 export default Panel;

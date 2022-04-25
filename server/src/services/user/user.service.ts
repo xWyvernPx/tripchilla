@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import { NextFunction } from "express";
-import { QueryOptionsWithWhere } from "sequelize";
+import { QueryOptionsWithWhere, QueryOptions } from "sequelize";
 import { UserType } from "../../../../types/GeneralEntity";
-import { Address, UserInfo } from "../../models";
+import { Address, Title, UserInfo } from "../../models";
 import User, { UserInstance } from "../../models/user/user.model";
 import { IAddress } from "../../types/ModelingEntity";
 import { PaginationQuery, PaginationResponse } from "../../utils/pagination";
@@ -14,6 +14,21 @@ export interface IUserService {
   ): Promise<PaginationResponse<UserInstance>>;
 }
 class UserService implements IUserService {
+  async getFullUser(userid: string) {
+    const user = await User.findOne({
+      where: {
+        userid: userid,
+      },
+      include: [
+        {
+          model: UserInfo,
+          attributes: ["bod", "name", "phone", "address"],
+        },
+        Title,
+      ],
+    });
+    return user;
+  }
   async getUser(payload: QueryOptionsWithWhere): Promise<UserType> {
     // private
     const rs = await User.findOne(payload);

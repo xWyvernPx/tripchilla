@@ -37,5 +37,15 @@ class UserController {
       res.status(400).json(JSend.error(err.message));
     }
   }
+  async getFullUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { user } = req;
+      const result = await userService.getFullUser(user as string);
+      if (user) res.status(200).json(JSend.success(result));
+      else throw new Error("User not found");
+    } catch (err: any) {
+      res.status(400).json(JSend.error(err.message));
+    }
+  }
 }
 export default new UserController();

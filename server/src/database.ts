@@ -29,6 +29,23 @@ const config2: Options = {
     acquire: 10000000,
   },
 };
-const sequelize = new Sequelize(config2);
+const config3: Options = {
+  host: "localhost",
+  dialect: "postgres",
+  username: "su",
+  password: "123456",
+  database: "tripchilla",
+  port: 5432,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false, // <<<<<<< YOU NEED THIS
+    },
+  },
+  pool: {
+    acquire: 10000000,
+  },
+};
+const sequelize = new Sequelize(config3);
 
 export default sequelize;

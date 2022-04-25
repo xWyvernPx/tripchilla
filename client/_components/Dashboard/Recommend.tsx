@@ -25,19 +25,22 @@ const Recommend: React.FC<Props> = (props) => {
       onSlideChange={() => console.log("slide change")}
       className="mySwiper"
       breakpoints={{
-        640: {
-          slidesPerView: 1,
+        320: {
+          slidesPerView: 2,
           spaceBetween: 20,
         },
         768: {
           slidesPerView: 2,
-          spaceBetween: 40,
+          spaceBetween: 5,
         },
-        1024: {
+        1100: {
           slidesPerView: 3,
-          spaceBetween: 50,
+          spaceBetween: 5,
         },
         1280: {
+          slidesPerView: 3,
+        },
+        1580: {
           slidesPerView: 4,
         },
       }}
