@@ -19,9 +19,8 @@ export const launchRoute = (app: Application) => {
     }
   );
   app.use("/api/user", UserRouter);
-
   app.use("/api/auth/google", ggAuthRouter);
+  app.use("/api/tour", tourRouter);
   app.use("/api/title", titleRoute);
   app.use("/api/address", AddressRoute);
-  app.use("/api/tour", tourRouter);
 };

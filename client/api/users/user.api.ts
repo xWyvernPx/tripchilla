@@ -31,8 +31,15 @@ class UserAPI {
   }
   async register(user: { username: string; email: string; password: string }) {
     const url = `/user/register`;
-    const data = await axiosClient.post(url, user);
+    const data = await axiosClient.post(url, user, { withCredentials: true });
     if (data) return data;
+  }
+  async login(user: { username: string; password: string }) {
+    const url = `/user/login`;
+    return await axiosClient
+      .post(url, user)
+      .then((res) => res)
+      .catch((err) => err);
   }
 }
 export default new UserAPI();

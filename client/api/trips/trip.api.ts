@@ -5,7 +5,7 @@ class TripAPI {
   async getTrips(pagination: PaginationQuery) {
     const url = "/tour";
     const data = await axiosClient.get(url, { params: pagination });
-    return data;
+    return data.data;
   }
   async createTrips(payload: any) {
     const url = "/tour";

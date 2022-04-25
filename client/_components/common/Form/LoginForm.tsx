@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ErrorState from "./ErrorState";
 import { TextField } from "./TextField";
 import { IoPerson, IoLockClosed } from "react-icons/io5";
@@ -23,6 +23,7 @@ import axiosClient from "api/axiosClient";
 interface Props {
   onChangeToSignUp: Function;
   handleSubmitForm: SubmitHandler<FieldValues>;
+  resetFieldTrigger?: boolean;
 }
 const LoginSchema = yup
   .object({
@@ -30,13 +31,21 @@ const LoginSchema = yup
     password: yup.string().required("Password is required"),
   })
   .required();
-const LoginForm: React.FC<Props> = ({ onChangeToSignUp, handleSubmitForm }) => {
+const LoginForm: React.FC<Props> = ({
+  onChangeToSignUp,
+  handleSubmitForm,
+  resetFieldTrigger,
+}) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
     control,
   } = useForm({ resolver: yupResolver(LoginSchema) });
+  useEffect(() => {
+    if (resetFieldTrigger) reset();
+  }, [resetFieldTrigger]);
 
   const route = useRouter();
   return (

@@ -4,6 +4,7 @@ import AdsSidebar from "./Ads/AdsSidebar";
 import DestinationCard from "./Card/DestinationCard/DestinationCard";
 import DestHeadline from "./Card/DestinationHeadline/DestHeadline";
 import Modal from "./Modal/Modal";
+import Loader from "./Loader/Loader";
 import ScheduleCard from "./Card/ScheduleCard/ScheduleCard";
 import Sidebar from "../layout/sidebar/Sidebar";
 export * from "./Form/";
@@ -16,4 +17,5 @@ export {
   Modal,
   ScheduleCard,
   Sidebar,
+  Loader,
 };

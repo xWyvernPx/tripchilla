@@ -1,10 +1,15 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ErrorState from "./ErrorState";
 import { TextField } from "./TextField";
 import { IoMail, IoPerson, IoLockClosed } from "react-icons/io5";
 import styled from "styled-components";
 import { PrimaryFormButton } from "./FormButton";
-import { useForm, Controller } from "react-hook-form";
+import {
+  useForm,
+  Controller,
+  SubmitHandler,
+  FieldValues,
+} from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import userApi from "api/users/user.api";
@@ -29,16 +34,27 @@ const SignupSchema = yup
   .required();
 interface Props {
   onChangeToLogin: Function;
+  handleSubmitForm: SubmitHandler<FieldValues>;
+  resetFieldTrigger?: boolean;
 }
-const SignUpForm: React.FC<Props> = ({ onChangeToLogin }) => {
+const SignUpForm: React.FC<Props> = ({
+  onChangeToLogin,
+  handleSubmitForm,
+  resetFieldTrigger,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     setError,
+    reset,
     clearErrors,
   } = useForm({ resolver: yupResolver(SignupSchema) });
+
+  useEffect(() => {
+    if (resetFieldTrigger) reset();
+  }, [resetFieldTrigger]);
 
   const debounceCheckUsername = useCallback(
     debounce(
@@ -51,7 +67,7 @@ const SignUpForm: React.FC<Props> = ({ onChangeToLogin }) => {
             });
           if (value && username != "") clearErrors("username");
         }),
-      1000
+      400
     ),
     []
   );
@@ -70,24 +86,13 @@ const SignUpForm: React.FC<Props> = ({ onChangeToLogin }) => {
             });
           if (value && email != "") clearErrors("email");
         }),
-      1000
+      400
     ),
     []
   );
 
   const handleEmailChange = async (email: string) => {
     debounceCheckEmail(email);
-  };
-
-  const handleSubmitForm = async (data: any) => {
-    const { username, email, password } = data;
-    const user = {
-      username,
-      email,
-      password,
-    };
-    const rs = await userApi.register(user);
-    console.log(rs);
   };
 
   return (

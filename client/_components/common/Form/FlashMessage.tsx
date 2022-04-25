@@ -77,6 +77,14 @@ const FlashMessageWrapper = styled.div`
     font-weight: 500;
   }
 `;
+const FlashMessageLayout = styled.div`
+  position: absolute;
+  z-index: 70;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+`;
 const FlashMessage: React.FC<FlashMessageProps> = ({
   message,
   type,
@@ -86,26 +94,28 @@ const FlashMessage: React.FC<FlashMessageProps> = ({
   style,
 }) => {
   return (
-    <FlashMessageWrapper style={style} type={type}>
-      <IconX className="close" size={20} onClick={() => handleClose()} />
-      {type === "success" ? (
-        <IconCircleCheck size={100} strokeWidth={1} />
-      ) : (
-        <IconCircleX size={100} strokeWidth={1} />
-      )}
-      {type === "success" ? (
-        <span className="state">success</span>
-      ) : (
-        <span className="state">oops</span>
-      )}
-      <p>
-        {message ||
-          "Lorem ipsum dolor sit, amet consectetur adipisicing elit. "}
-      </p>
-      <button onClick={() => buttonHandle()}>
-        {buttonContent || type === "success" ? "done" : "try again"}
-      </button>
-    </FlashMessageWrapper>
+    <FlashMessageLayout>
+      <FlashMessageWrapper style={style} type={type}>
+        <IconX className="close" size={20} onClick={() => handleClose()} />
+        {type === "success" ? (
+          <IconCircleCheck size={100} strokeWidth={1} />
+        ) : (
+          <IconCircleX size={100} strokeWidth={1} />
+        )}
+        {type === "success" ? (
+          <span className="state">success</span>
+        ) : (
+          <span className="state">oops</span>
+        )}
+        <p>
+          {message ||
+            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. "}
+        </p>
+        <button onClick={() => buttonHandle()}>
+          {buttonContent || type === "success" ? "done" : "try again"}
+        </button>
+      </FlashMessageWrapper>
+    </FlashMessageLayout>
   );
 };
 

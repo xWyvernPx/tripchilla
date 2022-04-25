@@ -67,13 +67,16 @@ Passport.use(
         if (isMatch) {
           done(null, rs);
         } else {
-          done(new Error("Username or password are wrong."), null);
+          throw new Error("Username or password are wrong.");
         }
+      } else {
+        throw new Error("Username or password are wrong.");
       }
-    } catch (error) {
-      // const err: any = new Error("Username or password are wrong.");
-      // err.status = 400;
-      done({ message: "Username or password are wrong.", status: 400 }, null);
+    } catch (error: any) {
+      const err: any = new Error(error.message);
+      err.status = 400;
+
+      done(err, null);
     }
   })
 );
@@ -91,6 +94,7 @@ Passport.use(
           done(null, result);
         } else throw new Error("User not created!");
       } catch (error: any) {
+        console.log("vo catch luon");
         error.status = 400;
         done(error, null);
       }

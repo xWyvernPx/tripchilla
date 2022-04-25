@@ -1,5 +1,5 @@
 import express from "express";
-import passport from "passport";
+import passport, { session } from "passport";
 import { userSchema } from "../../../models/user/user.model";
 import userService from "../../../services/user/user.service";
 import { validateBody } from "../../../utils/ValidateFunc";
@@ -16,13 +16,20 @@ UserRouter.route("/register").post(
     });
   }
 );
-UserRouter.route("/login").post(passport.authenticate("local"), (req, res) => {
-  console.log(req.user);
-  res.json({
-    status: "success",
-    message: "You are successfully logged in!",
-  });
-});
+UserRouter.route("/login").post(
+  passport.authenticate("local", {
+    session: true,
+    successRedirect: "http://localhost:3000/",
+  }),
+  (req, res, next) => {
+    const { passport } = req.session as any;
+    console.log(passport, "test");
+    res.json({
+      status: "success",
+      message: "You are successfully logged in!",
+    });
+  }
+);
 UserRouter.post("/check-username", userController.checkUsername);
 UserRouter.post("/check-email", userController.checkEmail);
 export default UserRouter;
