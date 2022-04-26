@@ -18,7 +18,7 @@ export interface TourType {
 }
 export interface ParticipantType {
   tourid: string;
-  userId: string;
+  userid: string;
   date_join: Date;
   Tour?: TourType | null;
   User?: UserType | null;

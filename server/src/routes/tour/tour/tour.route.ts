@@ -12,6 +12,8 @@ tourRouter
   .post(validateBody(TourSchemas.tourBodySchema), tourController.createNewTour)
   .get(validatePagination, tourController.getAllTours);
 tourRouter.route("/suggest").get(tourController.suggestTours);
+tourRouter.route("/new_participant").post(tourController.newParicipant);
+tourRouter.route("/member_checking").post(tourController.memberChecking);
 tourRouter
   .route("/:tourId(*)")
   .get(

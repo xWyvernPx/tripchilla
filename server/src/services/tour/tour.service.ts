@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { Op, Sequelize } from "sequelize";
-import { TourType } from "../../../../types/GeneralEntity";
-import { Province, Tour, TourPhoto, User } from "../../models";
+import { ParticipantType, TourType } from "../../../../types/GeneralEntity";
+import { Participant, Province, Tour, TourPhoto, User } from "../../models";
 import { TourInstance } from "../../models/tour/tour.model";
 import { ITour } from "../../types/ModelingEntity";
 import { PaginationQuery, PaginationResponse } from "../../utils/pagination";
@@ -54,13 +54,13 @@ class TourService implements ITourService {
           location_detail: tourInstance.dataValues.Province.dataValues
             ? tourInstance.dataValues.Province.dataValues
             : null,
-          participants: tourInstance.dataValues.Users.dataValues
-            ? tourInstance.dataValues.Users.dataValues
+          participants: tourInstance.dataValues.Users
+            ? tourInstance.dataValues.Users
             : null,
           tour_photo: tourInstance.dataValues.TourPhotos
             ? tourInstance.dataValues.TourPhotos
             : null,
-          // ...rest,
+          ...rest,
         };
         return tourResponse;
       } else return null;
@@ -171,6 +171,25 @@ class TourService implements ITourService {
       });
       return rsMapped;
     });
+  }
+  public async newParticipant({ tourid, userid, date_join }: ParticipantType) {
+    const [isValidUser, isValidTour] = await Promise.all([
+      Tour.count({ where: { tourid } }),
+      User.count({ where: { userid } }),
+    ]);
+    if ((await Participant.count({ where: { tourid, userid } })) > 0)
+      throw new Error("User has been joined this tour");
+
+    if (isValidTour > 0 && isValidUser > 0) {
+      const rs = await Participant.create({ tourid, userid, date_join });
+      if (rs) return true;
+      else return false;
+    } else throw new Error("Invalid user or tour");
+  }
+  public async memberChecking({ tourid, userid }: ParticipantType) {
+    const rs = await Participant.count({ where: { tourid, userid } });
+    if (rs > 0) return true;
+    else return false;
   }
   // public updateTour( tour: ITour) : Promise<TourInstance> {
   //     return Tour.update(tour, {

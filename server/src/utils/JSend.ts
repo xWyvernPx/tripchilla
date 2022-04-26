@@ -1,7 +1,8 @@
 const JSend = {
-  success: (data: any) => ({
+  success: (data: any, message?: any) => ({
     status: "success",
     data,
+    message,
   }),
   fail: (message: any, data?: any) => ({
     status: "fail",

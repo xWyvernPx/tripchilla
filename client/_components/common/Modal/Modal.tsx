@@ -47,11 +47,21 @@ const ModalWrapper = styled.div`
   place-items: center;
   background-color: white;
   box-shadow: 2px 3px 10px 2px rgba(0, 0, 0, 0.2);
+  overflow-x: hidden;
+  overflow-y: auto;
   //position
   position: absolute;
   isolation: isolate;
   z-index: 100;
   inset: 5%;
+
+  & {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const CloseButton = styled.button`
   width: fit-content;

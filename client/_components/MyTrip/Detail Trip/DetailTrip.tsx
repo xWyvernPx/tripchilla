@@ -1,15 +1,34 @@
 import { IconCalendar, IconMapPin, IconStar, IconUsers } from "@tabler/icons";
 import useTrips from "hooks/useTrips";
 import React, { useCallback, useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { PrimaryFormButton, SecondaryFormButton } from "_components/common";
+import Alert, { ArlertProps } from "_components/common/Alert/Alert";
 import { blobToBase64 } from "_helpers/bufferToString";
+import { authAtom } from "_states";
 interface Props {
   payload: any;
 }
-const DetailTrip: React.FC<Props> = (props) => {
-  const { payload } = props;
+interface Test {
+  isShowe: boolean;
+}
+const DetailTrip: React.FC<Props> = ({ payload }) => {
   const [trip, setTrip] = useState(null);
-  const { getTourById } = useTrips();
+  const user = useRecoilValue(authAtom);
+  const [isJoined, setIsJoined] = useState<boolean>(null);
+  const [alert, setAlert] = useState<ArlertProps>({
+    message: "",
+    onCancel: () => {
+      setAlert({ ...alert, isShow: false });
+    },
+    onConfirm: () => {
+      setAlert({ ...alert, isShow: false });
+    },
+    title: "",
+    isShow: false,
+  });
+  const { getTourById, addNewParticipant, memberChecking } = useTrips();
   const [tripImages, setTripImages] = useState({
     coverImage: null,
   });
@@ -23,7 +42,7 @@ const DetailTrip: React.FC<Props> = (props) => {
     fetchTrip();
   }, [payload]);
   useEffect(() => {
-    if (trip) {
+    if (trip && trip.tour_photo[0]) {
       blobToBase64(trip.tour_photo[0]?.photo).then((data) =>
         setTripImages({
           coverImage: data,
@@ -31,7 +50,18 @@ const DetailTrip: React.FC<Props> = (props) => {
       );
     }
   }, [trip]);
-  console.log(tripImages?.coverImage);
+  const fetchIsJoined = useCallback(
+    async (payload: { tourid: string; userid: string }) => {
+      const isJoined = await memberChecking(payload);
+      setIsJoined(isJoined);
+    },
+    []
+  );
+  useEffect(() => {
+    if (trip?.tourid && user?.userid) {
+      fetchIsJoined({ tourid: trip.tourid, userid: user.userid });
+    }
+  }, [trip]);
   return (
     <DetailLayout>
       <CoverImage src={tripImages?.coverImage}></CoverImage>
@@ -60,8 +90,33 @@ const DetailTrip: React.FC<Props> = (props) => {
             <DateBlock date={new Date(trip?.end)} />
           </Schedule>
           <InteractiveButtons>
-            <button>Join This Tour</button>
-            <button>Add to Favorites</button>
+            <PrimaryFormButton
+              onClick={() => {
+                setAlert({
+                  isShow: true,
+                  message: "Are you sure to join this tour ?",
+                  title: "Confirmation",
+                  onCancel: () => {
+                    setAlert({ ...alert, isShow: false });
+                  },
+                  onConfirm: async () => {
+                    const rs = await addNewParticipant({
+                      date_join: new Date(),
+                      tourid: trip?.tourid,
+                      userid: user?.userid,
+                    });
+                    if (rs) {
+                      fetchTrip();
+                    }
+                    setAlert({ ...alert, isShow: false });
+                  },
+                });
+              }}
+              disabled={isJoined}
+            >
+              {`${isJoined ? "Joined" : "Join This Tour"}`}
+            </PrimaryFormButton>
+            <SecondaryFormButton>Add to Favorites</SecondaryFormButton>
           </InteractiveButtons>
         </div>
       </div>
@@ -82,6 +137,14 @@ const DetailTrip: React.FC<Props> = (props) => {
           eos suscipit.
         </p>
       </DescribeArea>
+      {alert.isShow && (
+        <Alert
+          message="Are you sure to join this tour?"
+          title="Confirmation"
+          onCancel={alert.onCancel}
+          onConfirm={alert.onConfirm}
+        />
+      )}
     </DetailLayout>
   );
 };
@@ -90,32 +153,40 @@ const InteractiveButtons = styled.div`
   //dimensions
   width: 100%;
   height: fit-content;
+  margin-top: 1rem;
   //display
   display: flex;
   column-gap: 2rem;
+  justify-content: flex-start;
   button {
-    /* dimension */
+    margin: unset;
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+  /* button {
+    dimension
     width: fit-content;
     height: fit-content;
     padding: 0.75rem 2rem;
     margin-top: 1rem;
-    /* display */
+    display
     background-color: var(--lighter-gray);
     border-radius: var(--radius);
-    /* typo */
+    typo
     color: var(--dark);
     font-size: var(--fs-medium);
     font-weight: 600;
     &:hover {
-      /* display */
+      display
       background-color: var(--primary-color);
       border-radius: var(--radius);
-      /* typo */
+      typo
       color: var(--white);
       font-size: var(--fs-medium);
       font-weight: 600;
     }
-  }
+  }  */
 `;
 interface DataBlockProps {
   date: Date;
@@ -141,8 +212,6 @@ const DetailLayout = styled.div`
   height: 100%;
   /* padding: 1rem; */
   //display
-  overflow-x: hidden;
-  overflow-y: auto;
 
   //position
   /* position: relative; */
@@ -150,7 +219,7 @@ const DetailLayout = styled.div`
     margin-left: 2rem;
     margin-top: 1rem;
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
 
     z-index: 5;
     .information {
@@ -202,6 +271,7 @@ const TripName = styled.span`
   color: var(--dark);
   font-size: 3rem;
   font-weight: bold;
+  line-height: 1.5;
 `;
 const BriefInfo = styled.div`
   //dimensions

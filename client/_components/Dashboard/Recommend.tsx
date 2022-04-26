@@ -21,8 +21,8 @@ const Recommend: React.FC<Props> = (props) => {
       navigation={true}
       pagination={{ clickable: true }}
       scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
+      // onSwiper={(swiper) => console.log(swiper)}
+      // onSlideChange={() => console.log("slide change")}
       className="mySwiper"
       breakpoints={{
         320: {

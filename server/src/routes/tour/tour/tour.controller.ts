@@ -42,5 +42,28 @@ class TourController {
       next(e);
     }
   }
+  async newParicipant(req: Request, res: Response, next: NextFunction) {
+    try {
+      const payload = req.body;
+      const rs = await tourService.newParticipant(payload);
+      if (rs)
+        return res
+          .status(201)
+          .json(JSend.success(null, "New participant added"));
+      else next(Error("Server error"));
+    } catch (e: any) {
+      next(e);
+    }
+  }
+  async memberChecking(req: Request, res: Response, next: NextFunction) {
+    try {
+      const payload: any = req.body;
+      const rs = await tourService.memberChecking(payload);
+      if (rs) res.status(200).json(JSend.success(rs, "Already joined"));
+      else res.status(200).json(JSend.success(rs, "Not joined"));
+    } catch (error: any) {
+      res.json(JSend.error(error.message));
+    }
+  }
 }
 export default new TourController();

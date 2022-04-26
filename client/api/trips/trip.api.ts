@@ -1,5 +1,6 @@
 import axiosClient from "api/axiosClient";
 import { PaginationQuery } from "types/common.type";
+import { ParticipantType } from "../../../types/GeneralEntity";
 
 class TripAPI {
   async getTrips(pagination: PaginationQuery) {
@@ -16,6 +17,14 @@ class TripAPI {
     const url = `/tour/${tripId}`;
     const data = await axiosClient.get(url);
     return data;
+  }
+  async addNewParticipant(payload: ParticipantType) {
+    const url = "/tour/new_participant";
+    const data: any = await axiosClient.post(url, payload);
+    return data.status === "success";
+  }
+  async memberChecking(payload: { tourid: string; userid: string }) {
+    return await axiosClient.post("/tour/member_checking", payload);
   }
 }
 export default new TripAPI();
