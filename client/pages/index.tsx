@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { AccountPanel, Ads2, Modal } from "_components/common";
 import { useNavigate } from "react-router-dom";
@@ -17,38 +17,30 @@ import LoginButton from "_components/common/AccountPanel/LoginButton/LoginButton
 import LoginScreen from "_components/LoginScreen/LoginScreen";
 import { authAtom } from "_states";
 import useAuth from "_actions/auth.action";
+import modalState from "_states/popup/modal";
+import useModal from "_actions/modal.action";
 
 const Home: NextPage = () => {
   const { trips, getTourById } = useTrips();
   const { getSaveUser } = useAuth();
+  const { closeModal } = useModal();
   useEffect(() => {
     getSaveUser();
   }, []);
 
   const authState = useRecoilValue(authAtom);
-  const [showModal, setShowModal] = useState({
-    show: false,
-    component: null,
-    payload: null,
-  });
-  const handleCloseModal = useCallback(() => {
-    setShowModal({
-      ...showModal,
-      show: false,
-    });
-  }, []);
-
+  const [showModal, setShowModal] = useRecoilState(modalState);
   const handleCardClick = useCallback((payload: any) => {
     setShowModal({
-      show: true,
-      component: DetailTrip,
+      isOpen: true,
+      component: "DetailTrip",
       payload,
     });
   }, []);
   const handleLoginButtonClick = useCallback((payload?: any) => {
     setShowModal({
-      show: true,
-      component: LoginScreen,
+      isOpen: true,
+      component: "LoginScreen",
       payload,
     });
   }, []);
@@ -73,14 +65,15 @@ const Home: NextPage = () => {
         <MySchedule />
         <Upcoming />
       </RightSidebar>
-      {showModal.show && (
+      {showModal.isOpen && (
         <Modal
-          onCloseModal={handleCloseModal}
+          onCloseModal={closeModal}
           formComponent={
-            <showModal.component
-              closeModal={handleCloseModal}
-              payload={showModal.payload}
-            ></showModal.component>
+            showModal.component === "DetailTrip" ? (
+              <DetailTrip />
+            ) : (
+              <LoginScreen />
+            )
           }
         />
       )}

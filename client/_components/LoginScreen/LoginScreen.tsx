@@ -1,52 +1,41 @@
-import React, { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import { TextField } from "_components/common/Form/TextField";
-import { AiFillIdcard } from "react-icons/ai";
-import ErrorState from "_components/common/Form/ErrorState";
-import SignUpForm from "_components/common/Form/SignUpForm";
-import LoginForm from "_components/common/Form/LoginForm";
-import FlashMessage from "_components/common/Form/FlashMessage";
-import { FieldValues } from "react-hook-form";
 import userApi from "api/users/user.api";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { FieldValues } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import styled from "styled-components";
 import { Loader } from "_components/common";
-import { route } from "next/dist/server/router";
+import FlashMessage from "_components/common/Form/FlashMessage";
+import LoginForm from "_components/common/Form/LoginForm";
+import SignUpForm from "_components/common/Form/SignUpForm";
+import loaderState from "_states/loader";
+import flashMessageState from "_states/popup/flashMessage";
 import useAuth from "../../_actions/auth.action";
 const LoginScreen: React.FC<{ closeModal?: Function }> = ({ closeModal }) => {
   ////PERFORMANCE CHECK
   useEffect(() => {
     console.log("login screen rendered");
   });
-
   //////
+
   const [gotAccount, setGotAccount] = useState(true);
   const [resetTrigger, setResetTrigger] = useState(false);
   const [resetTriggerReg, setResetTriggerReg] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [flMessageState, setFlashMessageState] =
+    useRecoilState(flashMessageState);
+  const [loading, setLoading] = useRecoilState(loaderState);
   const { getSaveUser } = useAuth();
-  const [flashMessage, setFlashMessage] = useState<{
-    message: string;
-    type: "success" | "error";
-    show: boolean;
-    buttonContent?: string;
-    buttonHandle?: Function;
-  }>({
-    message: "",
-    type: "success",
-    show: false,
-    buttonContent: "",
-    buttonHandle: () => {},
-  });
-  const loginSubmitHandle = async (data: FieldValues) => {
+
+  const loginSubmitHandle = useCallback(async (data: FieldValues) => {
     setLoading(true);
     const { username, password } = data;
     const result: any = await userApi.login({ username, password });
     if (result.status === "success") {
       setLoading(false);
       getSaveUser();
-      setFlashMessage({
+      setFlashMessageState({
         message: result.message,
         type: "success",
-        show: true,
+        isOpen: true,
         buttonContent: "Let's go",
         buttonHandle: () => {
           closeModal();
@@ -54,13 +43,13 @@ const LoginScreen: React.FC<{ closeModal?: Function }> = ({ closeModal }) => {
       });
     } else {
       setLoading(false);
-      setFlashMessage({
+      setFlashMessageState({
         message: result.message,
         type: "error",
-        show: true,
+        isOpen: true,
         buttonContent: "",
         buttonHandle: () => {
-          setFlashMessage({ ...flashMessage, show: false });
+          setFlashMessageState({ ...flMessageState, isOpen: false });
           setTimeout(() => {
             setResetTrigger(false);
           }, 0);
@@ -68,9 +57,8 @@ const LoginScreen: React.FC<{ closeModal?: Function }> = ({ closeModal }) => {
         },
       });
     }
-  };
-
-  const registerSubmitHandle = async (data: FieldValues) => {
+  }, []);
+  const registerSubmitHandle = useCallback(async (data: FieldValues) => {
     setLoading(true);
     const { username, password, email } = data;
     const result: any = await userApi.register({ email, username, password });
@@ -78,10 +66,10 @@ const LoginScreen: React.FC<{ closeModal?: Function }> = ({ closeModal }) => {
     if (result.status === "success") {
       setLoading(false);
       getSaveUser();
-      setFlashMessage({
+      setFlashMessageState({
         message: result.message,
         type: "success",
-        show: true,
+        isOpen: true,
         buttonContent: "Let's go",
         buttonHandle: () => {
           closeModal();
@@ -89,13 +77,13 @@ const LoginScreen: React.FC<{ closeModal?: Function }> = ({ closeModal }) => {
       });
     } else {
       setLoading(false);
-      setFlashMessage({
+      setFlashMessageState({
         message: result.message,
         type: "error",
-        show: true,
+        isOpen: true,
         buttonContent: "",
         buttonHandle: () => {
-          setFlashMessage({ ...flashMessage, show: false });
+          setFlashMessageState({ ...flMessageState, isOpen: false });
           setTimeout(() => {
             setResetTriggerReg(false);
           }, 0);
@@ -103,49 +91,45 @@ const LoginScreen: React.FC<{ closeModal?: Function }> = ({ closeModal }) => {
         },
       });
     }
-  };
+  }, []);
 
   const oauthButtonsHandler = useMemo(
     () => ({
       google: async () => {
         const newWindow = window.open(
           "https://localhost:4000/api/auth/google",
-          "_blank",
+          "_parent",
           "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400"
         );
-        const timer = setInterval(() => {
-          if (newWindow.closed) {
-            clearInterval(timer);
-            getSaveUser();
-            setFlashMessage({
-              message: "You have been logged in",
-              type: "success",
-              show: true,
-              buttonContent: "Let's go",
-              buttonHandle: () => {
-                closeModal();
-              },
-            });
-          }
-        });
+        // => This not working on firefox due to config dom.allow_scripts_to_close_windows = false
+        // const timer = setInterval(() => {
+        //   if (newWindow.closed) {
+        //     getSaveUser();
+        //     setFlashMessageState({
+        //       message: "You have been logged in",
+        //       type: "success",
+        //       isOpen: true,
+        //       buttonContent: "Let's go",
+        //       buttonHandle: () => {
+        //         closeModal();
+        //       },
+        //     });
+        //     clearInterval(timer);
+        //   }
+        // });
       },
     }),
     []
   );
   return (
     <LoginScreenLayout>
-      {flashMessage.show ? (
+      {flMessageState.isOpen ? (
         <FlashMessage
           style={{
             left: "50%",
             top: "50%",
             transform: "translate(-50%, -50%)",
           }}
-          handleClose={() => setFlashMessage({ ...flashMessage, show: false })}
-          type={flashMessage.type}
-          message={flashMessage.message}
-          buttonContent={flashMessage.buttonContent}
-          buttonHandle={flashMessage.buttonHandle}
         />
       ) : null}
       {gotAccount ? (
@@ -209,4 +193,4 @@ const LoginScreenBackgroundFilter = styled.div`
   z-index: -9;
 `;
 
-export default LoginScreen;
+export default React.memo(LoginScreen);

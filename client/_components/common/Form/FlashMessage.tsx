@@ -1,17 +1,44 @@
-import React, { StyleHTMLAttributes } from "react";
+import { IconCircleCheck, IconCircleX } from "@tabler/icons";
+import React from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { IconCircleCheck, IconCircleX, IconX } from "@tabler/icons";
+import flashMessageState from "_states/popup/flashMessage";
 export interface FlashMessageProps {
-  message?: string;
-  type?: "success" | "error";
-  buttonHandle?: Function;
-  buttonContent?: string;
-  handleClose: Function;
   style: Object;
 }
 interface FlashMessageWrapperProps {
   type: "success" | "error";
 }
+
+const FlashMessage: React.FC<FlashMessageProps> = ({ style }) => {
+  const [flMessageState, setFlashMessageState] =
+    useRecoilState(flashMessageState);
+  return (
+    <FlashMessageLayout>
+      <FlashMessageWrapper style={style} type={flMessageState.type}>
+        {flMessageState.type === "success" ? (
+          <IconCircleCheck size={100} strokeWidth={1} />
+        ) : (
+          <IconCircleX size={100} strokeWidth={1} />
+        )}
+        {flMessageState.type === "success" ? (
+          <span className="state">success</span>
+        ) : (
+          <span className="state">oops</span>
+        )}
+        <p>
+          {flMessageState.message ||
+            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. "}
+        </p>
+        <button onClick={() => flMessageState.buttonHandle()}>
+          {flMessageState.buttonContent || flMessageState.type === "success"
+            ? "done"
+            : "try again"}
+        </button>
+      </FlashMessageWrapper>
+    </FlashMessageLayout>
+  );
+};
 const FlashMessageWrapper = styled.div`
   /* dimension */
   width: fit-content;
@@ -85,38 +112,4 @@ const FlashMessageLayout = styled.div`
   display: grid;
   place-items: center;
 `;
-const FlashMessage: React.FC<FlashMessageProps> = ({
-  message,
-  type,
-  buttonHandle,
-  buttonContent,
-  handleClose,
-  style,
-}) => {
-  return (
-    <FlashMessageLayout>
-      <FlashMessageWrapper style={style} type={type}>
-        <IconX className="close" size={20} onClick={() => handleClose()} />
-        {type === "success" ? (
-          <IconCircleCheck size={100} strokeWidth={1} />
-        ) : (
-          <IconCircleX size={100} strokeWidth={1} />
-        )}
-        {type === "success" ? (
-          <span className="state">success</span>
-        ) : (
-          <span className="state">oops</span>
-        )}
-        <p>
-          {message ||
-            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. "}
-        </p>
-        <button onClick={() => buttonHandle()}>
-          {buttonContent || type === "success" ? "done" : "try again"}
-        </button>
-      </FlashMessageWrapper>
-    </FlashMessageLayout>
-  );
-};
-
 export default FlashMessage;

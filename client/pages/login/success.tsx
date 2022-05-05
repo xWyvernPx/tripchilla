@@ -1,8 +1,10 @@
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
 const Success = () => {
+  const route = useRouter();
   useEffect(() => {
-    window.close();
+    route.push("/");
   }, []);
 
   return <div>Login successfully</div>;

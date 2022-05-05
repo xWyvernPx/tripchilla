@@ -21,10 +21,7 @@ const DestinationCard: React.FC<DestCardProps> = (props) => {
         id="destcardbg"
         backgroundUrl="https://img.freepik.com/free-vector/outdoor-nature-adventure-camping-illustration-cartoon-flat-tourist-camp-with-picnic-spot-tent-among-forest-mountain-landscape_1150-37344.jpg?t=st=1649253110~exp=1649253710~hmac=8a9a79b71b0659ebdf97e4a712bd7f30a6899129749e780efe4205deb50227d8&w=2000"
       ></CardBackground>
-      <h3>
-        {data && data.name}
-        <span>{data && data.name}</span>
-      </h3>
+      <h3>{data?.name}</h3>
       <div>
         <Properties>
           <IconMapPin />
@@ -58,6 +55,7 @@ const CardWrapper = styled.div`
   cursor: pointer;
   box-shadow: 0px 10px 18px -5px rgba(0, 0, 0, 0.25);
   h3 {
+    min-width: 12rem;
     max-width: 12rem;
     color: var(--white);
     font-weight: semi-bold;
@@ -86,11 +84,13 @@ const CardWrapper = styled.div`
   @media screen and (max-width: 1099.98px) {
     h3 {
       max-width: 14rem;
+      min-width: 14rem;
     }
   }
   @media screen and (max-width: 767.98px) {
     h3 {
       max-width: 9rem;
+      min-width: 9rem;
       -webkit-line-clamp: 2;
     }
   }
@@ -98,6 +98,7 @@ const CardWrapper = styled.div`
     padding: 0.5rem;
     h3 {
       max-width: 8.5rem;
+      min-width: 8.5rem;
       -webkit-line-clamp: 2;
     }
   }

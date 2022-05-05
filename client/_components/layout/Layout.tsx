@@ -12,6 +12,7 @@ export const GlobalStyle = createGlobalStyle`
 :root {
   --swiper-navigation-size: 34px;
     --primary-color: #1cc28b;
+    --primary-color-rgb:rgb(28, 194, 139);
     --lighter-primary-color: #a5ffe1;
     --gray: #72848c;
     --lighter-gray: #b7c6cc;
@@ -48,6 +49,7 @@ export const GlobalStyle = createGlobalStyle`
     border: 0;
     font-size: 100%;
     box-sizing: border-box;
+    scroll-behavior: smooth;
    }
    html, body, div, span, applet, object, iframe,
    h1, h2, h3, h4, h5, h6, p, blockquote, pre,

@@ -1,46 +1,43 @@
-import { IconCalendar, IconMapPin, IconStar, IconUsers } from "@tabler/icons";
+import {
+  IconCalendar,
+  IconCurrencyDollar,
+  IconMapPin,
+  IconStar,
+  IconUsers,
+} from "@tabler/icons";
 import useTrips from "hooks/useTrips";
 import React, { useCallback, useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { PrimaryFormButton, SecondaryFormButton } from "_components/common";
-import Alert, { ArlertProps } from "_components/common/Alert/Alert";
+import Alert from "_components/common/Alert/Alert";
+import CheckoutModal from "_components/common/Modal/CheckoutModal";
 import { blobToBase64 } from "_helpers/bufferToString";
 import { authAtom } from "_states";
+import alertState from "_states/popup/alert";
+import modalState from "_states/popup/modal";
 interface Props {
-  payload: any;
+  // payload: any;
 }
-interface Test {
-  isShowe: boolean;
-}
-const DetailTrip: React.FC<Props> = ({ payload }) => {
+
+const DetailTrip: React.FC<Props> = () => {
   const [trip, setTrip] = useState(null);
-  const user = useRecoilValue(authAtom);
   const [isJoined, setIsJoined] = useState<boolean>(null);
-  const [alert, setAlert] = useState<ArlertProps>({
-    message: "",
-    onCancel: () => {
-      setAlert({ ...alert, isShow: false });
-    },
-    onConfirm: () => {
-      setAlert({ ...alert, isShow: false });
-    },
-    title: "",
-    isShow: false,
-  });
-  const { getTourById, addNewParticipant, memberChecking } = useTrips();
   const [tripImages, setTripImages] = useState({
     coverImage: null,
   });
+  const [modal, setModal] = useRecoilState(modalState);
+  const [alert, setAlert] = useRecoilState(alertState);
+  const user = useRecoilValue(authAtom);
+  const { getTourById, addNewParticipant, memberChecking } = useTrips();
   const fetchTrip = useCallback(async () => {
-    const trip = await getTourById(payload.tourid);
-
+    const trip = await getTourById(modal.payload.tourid);
     setTrip(trip);
-  }, [payload]);
+  }, [modal.payload]);
   useEffect(() => {
     // console.log(payload);
     fetchTrip();
-  }, [payload]);
+  }, [modal.payload]);
   useEffect(() => {
     if (trip && trip.tour_photo[0]) {
       blobToBase64(trip.tour_photo[0]?.photo).then((data) =>
@@ -64,6 +61,7 @@ const DetailTrip: React.FC<Props> = ({ payload }) => {
   }, [trip]);
   return (
     <DetailLayout>
+      <CheckoutModal />
       <CoverImage src={tripImages?.coverImage}></CoverImage>
       <div className="heading">
         <PrimaryImage />
@@ -84,6 +82,10 @@ const DetailTrip: React.FC<Props> = ({ payload }) => {
               <IconMapPin />
               <span>{trip?.location_detail?.name}</span>
             </div>
+            <div className="price">
+              <IconCurrencyDollar color="var(--dangerous)" strokeWidth={3} />
+              <span>{trip?.price_per_day}</span>
+            </div>
           </BriefInfo>
           <Schedule>
             <DateBlock date={new Date(trip?.start)} /> -
@@ -93,11 +95,11 @@ const DetailTrip: React.FC<Props> = ({ payload }) => {
             <PrimaryFormButton
               onClick={() => {
                 setAlert({
-                  isShow: true,
+                  isOpen: true,
                   message: "Are you sure to join this tour ?",
                   title: "Confirmation",
                   onCancel: () => {
-                    setAlert({ ...alert, isShow: false });
+                    setAlert({ ...alert, isOpen: false });
                   },
                   onConfirm: async () => {
                     const rs = await addNewParticipant({
@@ -108,7 +110,7 @@ const DetailTrip: React.FC<Props> = ({ payload }) => {
                     if (rs) {
                       fetchTrip();
                     }
-                    setAlert({ ...alert, isShow: false });
+                    setAlert({ ...alert, isOpen: false });
                   },
                 });
               }}
@@ -137,7 +139,7 @@ const DetailTrip: React.FC<Props> = ({ payload }) => {
           eos suscipit.
         </p>
       </DescribeArea>
-      {alert.isShow && (
+      {alert.isOpen && (
         <Alert
           message="Are you sure to join this tour?"
           title="Confirmation"
@@ -164,29 +166,6 @@ const InteractiveButtons = styled.div`
       opacity: 0.5;
     }
   }
-  /* button {
-    dimension
-    width: fit-content;
-    height: fit-content;
-    padding: 0.75rem 2rem;
-    margin-top: 1rem;
-    display
-    background-color: var(--lighter-gray);
-    border-radius: var(--radius);
-    typo
-    color: var(--dark);
-    font-size: var(--fs-medium);
-    font-weight: 600;
-    &:hover {
-      display
-      background-color: var(--primary-color);
-      border-radius: var(--radius);
-      typo
-      color: var(--white);
-      font-size: var(--fs-medium);
-      font-weight: 600;
-    }
-  }  */
 `;
 interface DataBlockProps {
   date: Date;
@@ -329,4 +308,4 @@ const DescribeArea = styled.div`
     line-height: 1.5;
   }
 `;
-export default DetailTrip;
+export default React.memo(DetailTrip);

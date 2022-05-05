@@ -3,6 +3,7 @@ import Layout from "../_components/layout/Layout";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Suspense, useEffect, useState } from "react";
 import { RecoilRoot } from "recoil";
+import { Loader } from "_components/common";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [showChild, setShowChild] = useState(false);
@@ -15,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Router>
       <RecoilRoot>
-        <Suspense fallback={<h1>Loading ... </h1>}>
+        <Suspense fallback={<Loader />}>
           <Layout>
             <Component {...pageProps} />
           </Layout>

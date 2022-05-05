@@ -10,7 +10,6 @@ const useTrips = () => {
       trip.start = new Date(trip.start).toDateString();
       trip.end = new Date(trip.end).toDateString();
     });
-    // console.log(data);
     setTrips(data.data);
   }, []);
   useEffect(() => {
@@ -33,6 +32,21 @@ const useTrips = () => {
     },
     [getAllTrips]
   );
+  const searchTrip = useCallback(async (term: string, page: number) => {
+    const pagination: PaginationQuery = {
+      page,
+      limit: 3,
+      order: "start",
+      sort: "desc",
+      query: term,
+    };
+    const data = await tripApi.getTrips(pagination);
+    data.data.map((trip: any) => {
+      trip.start = new Date(trip.start).toDateString();
+      trip.end = new Date(trip.end).toDateString();
+    });
+    return data;
+  }, []);
   const memberChecking = useCallback(
     async (payload: { tourid: string; userid: string }) => {
       const rs: any = await tripApi.memberChecking(payload);
@@ -47,6 +61,7 @@ const useTrips = () => {
     getTourById,
     addNewParticipant,
     memberChecking,
+    searchTrip,
   };
 };
 
