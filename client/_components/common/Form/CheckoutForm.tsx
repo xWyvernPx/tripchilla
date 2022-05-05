@@ -1,40 +1,119 @@
 import { IconMail, IconCreditCard } from "@tabler/icons";
-import React from "react";
+import React, { useCallback } from "react";
 import NumberFormat from "react-number-format";
 import styled from "styled-components";
 import { PrimaryFormButton } from "./FormButton";
 import { Multifield, TextField, TextFieldNormal } from "./TextField";
-
+import { Controller, useForm, useController } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import ErrorState from "./ErrorState";
+const LoginSchema = yup.object({
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Please enter a valid email"),
+  card_number: yup.string().required("Card number is required"),
+  card_expiry: yup
+    .string()
+    .required("Card expiry is required")
+    .matches(
+      /^(0[1-9]|1[0-2])\/([0-9]{2})$/,
+      "Please enter a valid expiry date"
+    ),
+  card_cvc: yup.string().required("Card CVC is required"),
+});
 const CheckoutForm = () => {
-  const exp = React.useRef(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm({
+    resolver: yupResolver(LoginSchema),
+    defaultValues: {
+      email: "",
+      card_number: "",
+      card_expiry: "",
+      card_cvc: "",
+    },
+  });
+
+  const handleCheckoutSubmit = useCallback((value) => {
+    console.log(value);
+  }, []);
   return (
-    <form action="">
-      <TextFieldNormal>
-        <input type="text" placeholder="   " />
+    <form action="" onSubmit={handleSubmit(handleCheckoutSubmit)}>
+      <TextFieldNormal error={errors?.email ? true : false}>
+        <input type="text" placeholder="   " {...register("email")} />
         <label htmlFor="">Email Address</label>
         <IconMail />
       </TextFieldNormal>
       <h3>Card Detail</h3>
+
       <TextFieldNormal>
-        <NumberFormat format={"#### #### #### ####"} placeholder="   " />
+        <Controller
+          control={control}
+          name="card_number"
+          defaultValue={""}
+          render={({ field }) => (
+            <NumberFormat
+              {...field}
+              format={"#### #### #### ####"}
+              placeholder="   "
+            />
+          )}
+        />
+
         <label htmlFor="">Card Number</label>
         <IconCreditCard />
+        <ErrorState
+          isShow={errors?.card_number ? true : false}
+          message={errors?.card_number?.message}
+        />
+      </TextFieldNormal>
+      <TextFieldNormal error={errors?.email ? true : false}>
+        <input type="text" placeholder="   " {...register("email")} />
+        <label htmlFor="">Email Address</label>
+        <IconMail />
       </TextFieldNormal>
       <Multifield>
-        <TextFieldNormal>
-          <NumberFormat format={"##/##"} placeholder="  " value={exp.current} />
-          <label htmlFor="">Exp</label>
-          <IconMail />
+        <TextFieldNormal error={errors?.card_expiry ? true : false}>
+          <Controller
+            control={control}
+            name="card_expiry"
+            render={({ field }) => (
+              <NumberFormat
+                {...field}
+                mask={["M", "M", "Y", "Y"]}
+                format={"##/##"}
+                placeholder=" "
+              />
+            )}
+          />
+
+          <label htmlFor="">Expiry</label>
+          <ErrorState
+            isShow={errors?.card_expiry ? true : false}
+            message={errors?.card_expiry?.message}
+          />
         </TextFieldNormal>
-        <TextFieldNormal>
-          <NumberFormat
-            type="password"
-            minLength={3}
-            maxLength={3}
-            placeholder="   "
+        <TextFieldNormal error={errors?.card_cvc ? true : false}>
+          <Controller
+            control={control}
+            name="card_cvc"
+            defaultValue={""}
+            render={({ field }) => (
+              <NumberFormat
+                {...field}
+                type="password"
+                minLength={3}
+                maxLength={3}
+                placeholder="   "
+              />
+            )}
           />
           <label htmlFor="">CVC</label>
-          <IconMail />
         </TextFieldNormal>
       </Multifield>
       <TotalArea>

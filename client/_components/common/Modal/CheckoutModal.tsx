@@ -1,4 +1,5 @@
-import React from "react";
+import { useOutsideAlerter } from "hooks/useOutsideDetect";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import CheckoutForm from "../Form/CheckoutForm";
 
@@ -69,27 +70,35 @@ const PaymentDetail = styled.div`
   }
 `;
 const CheckoutModal: React.FC<{}> = () => {
-  return (
-    <CheckoutModalLayout>
-      <CheckoutPage>
-        <h1>checkout</h1>
-        <Devider />
-        <CheckoutContent>
-          <CheckoutItem>
-            <h2>Order</h2>
-            <p>Check carefully the trip selected.</p>
-          </CheckoutItem>
-          <PaymentDetail>
-            <h2>Payment Detail</h2>
-            <p>
-              Complete your purchase item by providing your payment details.
-            </p>
-            <CheckoutForm />
-          </PaymentDetail>
-        </CheckoutContent>
-      </CheckoutPage>
-    </CheckoutModalLayout>
-  );
+  const [show, setShow] = useState(true);
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef, () => {
+    console.log("outside");
+    setShow(false);
+  });
+  if (show)
+    return (
+      <CheckoutModalLayout>
+        <CheckoutPage ref={wrapperRef}>
+          <h1>checkout</h1>
+          <Devider />
+          <CheckoutContent>
+            <CheckoutItem>
+              <h2>Order</h2>
+              <p>Check carefully the trip selected.</p>
+            </CheckoutItem>
+            <PaymentDetail>
+              <h2>Payment Detail</h2>
+              <p>
+                Complete your purchase item by providing your payment details.
+              </p>
+              <CheckoutForm />
+            </PaymentDetail>
+          </CheckoutContent>
+        </CheckoutPage>
+      </CheckoutModalLayout>
+    );
+  else return null;
 };
 
 export default CheckoutModal;

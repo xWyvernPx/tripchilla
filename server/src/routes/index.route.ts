@@ -9,6 +9,7 @@ import Passport from "passport";
 import axios from "axios";
 import isAuthorized from "../middleware/isAuthorized";
 import passport from "passport";
+import chargeRouter from "./tour/charge/charge.route";
 export const launchRoute = (app: Application) => {
   app.get(
     "/api/",
@@ -23,4 +24,5 @@ export const launchRoute = (app: Application) => {
   app.use("/api/tour", tourRouter);
   app.use("/api/title", titleRoute);
   app.use("/api/address", AddressRoute);
+  app.use("/api/charge", chargeRouter);
 };

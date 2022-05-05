@@ -1,0 +1,3 @@
+INSERT INTO public.participants (tourid, userid, date_join, active) VALUES ('$2b$10$k9Rgdblz7ekym3AWYXNzmeDYKa3xXbigfpsk3fcbnxlM9tlikxM5u', '$2b$10$wht1QzuOrhcRU/wsogUgueNzK7el54M1xHyuIru0d89XLaJXaFme6', '2022-04-25 17:00:00.000000', true);
+INSERT INTO public.participants (tourid, userid, date_join, active) VALUES ('$2b$10$XIf8HRr8KLmEyIo2nl1Jke85iGZx45hkb90L4Uri4fz1/WH.JKL8m', '$2b$10$wht1QzuOrhcRU/wsogUgueNzK7el54M1xHyuIru0d89XLaJXaFme6', '2022-04-26 13:49:54.550000', true);
+INSERT INTO public.participants (tourid, userid, date_join, active) VALUES ('$2b$10$k9Rgdblz7ekym3AWYXNzmeDYKa3xXbigfpsk3fcbnxlM9tlikxM5u', '$2b$10$hjjWAOK1Nb0QWy2L1PzbSeT9R5JCspNEjWPnslUvfWakXHoYI/UN6', '2022-05-03 14:37:30.871000', true);
