@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { NextFunction } from "express";
 import { QueryOptionsWithWhere, QueryOptions } from "sequelize";
 import { UserType } from "../../../../types/GeneralEntity";
+import { graph } from "../../database";
 import { Address, Title, UserInfo } from "../../models";
 import User, { UserInstance } from "../../models/user/user.model";
 import { IAddress } from "../../types/ModelingEntity";
@@ -114,6 +115,12 @@ class UserService implements IUserService {
       },
       { transaction: createUserTransaction, raw: true }
     );
+    const session = graph.driver.session({ database: "tripchilla" });
+    await session
+      .run(
+        `MERGE (p:User {id : "${resultCreateUser.id}", userid : "${resultCreateUser.userid}" ,username: "${resultCreateUser.username}" ,password: "${resultCreateUser.password}" ,ava : "${resultCreateUser.ava}" , email: "${resultCreateUser.email}" , infoid: "${resultCreateUser.infoid}" , level: "${resultCreateUser.level}" }) RETURN p`
+      )
+      .catch((err) => console.log(err));
     createUserTransaction.commit();
     return resultCreateUser;
   }

@@ -87,7 +87,7 @@ class TourService implements ITourService {
           : ["id", "ASC"],
       ],
       where: {
-        name: { [Op.like]: `%${pagination.query ? pagination.query : ""}%` },
+        name: { [Op.iLike]: `%${pagination.query ? pagination.query : ""}%` },
       },
       include: [{ model: Province }],
     });

@@ -13,6 +13,7 @@ const path = require("path");
 const morgan = require("morgan");
 const fs = require("fs");
 const app: Application = express();
+import { graph } from "./database";
 
 app.use(helmet());
 

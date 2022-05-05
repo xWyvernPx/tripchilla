@@ -1,4 +1,10 @@
 import { Sequelize, Options, Error } from "sequelize";
+import neo4j from "neo4j-driver";
+import { session } from "passport";
+const driver = neo4j.driver(
+  "neo4j://localhost",
+  neo4j.auth.basic("neo4j", "123456")
+);
 
 const config: Options = {
   host: `sql.bsite.net\\MSSQL2016`,
@@ -49,3 +55,7 @@ const config3: Options = {
 const sequelize = new Sequelize(config3);
 
 export default sequelize;
+export const graph = {
+  driver,
+  session: driver.session({ database: "tripchilla" }),
+};

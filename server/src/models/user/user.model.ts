@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../../database";
+import sequelize, { graph } from "../../database";
 import { IUser } from "../../types/ModelingEntity";
 import { UserInfoSchemas } from "./info.model";
 import bcrypt from "bcrypt";
@@ -94,4 +94,20 @@ export const userSchema = {
     ward: Joi.number(),
     detail: Joi.string(),
   }),
+};
+
+export const syncUsersToGraph = () => {
+  User.findAll({ raw: true }).then((users) => {
+    users.map((user) => {
+      const session = graph.driver.session({ database: "tripchilla" });
+      session
+        .run(
+          `MERGE (p:User {id : "${user.id}", userid : "${user.userid}" ,username: "${user.username}" ,password: "${user.password}" ,ava : "${user.ava}" , email: "${user.email}" , infoid: "${user.infoid}" , level: "${user.level}" }) RETURN p`
+        )
+        .catch((e) => console.log(e))
+        .finally(() => {
+          session.close();
+        });
+    });
+  });
 };
